@@ -1,0 +1,47 @@
+.title span {
+  background: linear-gradient(to right , #22f8f8, #2ee4f1, #20839b);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+@supports (animation-timeline: view()) {
+  .aboutdiv {
+    animation: animate-in ease-in forwards;
+    animation-timeline: view();
+    animation-range: entry 0% cover 100%;
+  }
+}
+
+@keyframes animate-in {
+  0% {
+    opacity: 0;
+    transform: scale(0);
+  }
+  30% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0);
+  }
+}
+
+.AboutText {
+  font-family: "Lato", sans-serif;
+  font-weight: 100;
+  letter-spacing: 3;
+  font-size: 20px;
+}
+
+.AboutText span {
+  background: linear-gradient(to right , #22f8f8, #2ee4f1, #2dc3e8);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.obj {
+  transform-style: preserve-3d;
+  transition: 0.5s all;
+  transform: rotateX(-25deg) rotateY(20deg);
+}
