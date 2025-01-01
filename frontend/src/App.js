@@ -10,6 +10,7 @@ import Discussion from "./components/discussion.jsx";
 import Chatbot from "./components/chatbot.jsx";
 import Profile from "./components/Profile.jsx";
 import Idform from "./components/Idform.jsx";
+import VerifyEmail from "./components/verifyEmail.jsx";
 
 function checkLogin(){
   const token = localStorage.getItem("token");
@@ -49,6 +50,10 @@ function App() {
     {
       path: "/getIds",
       element: checkLogin() ? <Idform /> : <Login />
+    },
+    {
+      path: "/verify-email",
+      element: <VerifyEmail />
     }
   ]);
 

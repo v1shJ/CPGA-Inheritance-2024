@@ -5,6 +5,5 @@ const upload = require("../config/multerConfig");
 
 router.post("/register", upload.single("file"), registerUser);
 router.post("/login", loginUser);
-router.post("/:id/addPlatforms", addPlatforms);
 
 module.exports = router;

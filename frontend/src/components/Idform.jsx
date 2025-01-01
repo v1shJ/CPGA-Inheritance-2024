@@ -24,7 +24,10 @@ function Idform() {
     console.log(ids);
 
     try {
-      const response = await axios.post(`${backendUrl}/api/user/${userid}/addPlatforms`, ids, {
+      const response = await axios.post(`${backendUrl}/api/${userid}/addPlatforms`, ids, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
         withCredentials: true,
       });
       // console.log(response.data);

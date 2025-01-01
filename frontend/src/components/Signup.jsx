@@ -82,6 +82,7 @@ const Form = () => {
       localStorage.setItem("token", response.data.token);
       localStorage.setItem("user", JSON.stringify(response.data.user));
       // console.log(response);
+      
       alert("user added successfully"); // Notify user of success
       setFormData({
         file: "",
@@ -104,10 +105,10 @@ const Form = () => {
 
   return (
     <div className="flex justify-center w-full h-full min-h-screen items-center bg-gradient-to-b from-black to-gray-800">
-      <div className="p-2 flex flex-col items-center shadow-2xl h-full justify-center w-full">
+      <div className="flex flex-col items-center shadow-2xl h-full justify-center w-full">
         <form
           onSubmit={handleSubmit}
-          className="flex flex-col items-center justify-center  gap-4 p-2 rounded-2xl border w-4/5 md:w-3/5"
+          className="flex flex-col mt-4 p-4 items-center justify-center bg-gradient-to-b from-gray-800 to-black gap-4 rounded-2xl border w-4/5 md:w-3/5"
         >
           <div>
             {error && (

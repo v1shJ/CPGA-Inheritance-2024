@@ -26,6 +26,10 @@ const userSchema = new mongoose.Schema({
   platformIds: {
     type: Array,
     default: []
+  },
+  emailVerified: {
+    type: Boolean,
+    default: false,
   }
 });
 

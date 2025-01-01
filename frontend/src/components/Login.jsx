@@ -45,8 +45,8 @@ const Login = () => {
 
   return (
     <div className="flex items-center justify-center h-screen">
-      <div className="p-4 flex flex-col gap-4 items-center shadow-2xl w-full h-full  bg-gradient-to-b from-black to-gray-800 justify-center">
-        <form className="flex flex-col items-center gap-4 p-4 border rounded-2xl w-4/5 md:w-3/5">
+      <div className="p-4 flex flex-col gap-4 items-center shadow-2xl w-full h-full bg-gradient-to-b from-black to-gray-800 justify-center">
+        <form className="flex flex-col items-center bg-gradient-to-b to-black from-gray-800 gap-4 p-4 border rounded-2xl w-4/5 md:w-3/5">
           <p className="text-center text-[#64ffda] text-4xl">Login</p>
 
           <div className="flex items-center border justify-center gap-2 p-4 bg-[#1b1b1b] rounded-xl shadow-inner w-full max-w-md">
