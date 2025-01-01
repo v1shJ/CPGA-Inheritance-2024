@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "./about.css";
-import videoSrc from '../../assets/WebsiteVideo.mp4';
+import videoSrc from "../../assets/WebsiteVideo.mp4";
 
 const images = [
   [
@@ -47,105 +47,114 @@ const About = () => {
   }, []);
 
   const [transformStyle, setTransformStyle] = useState(
-    'perspective(1200px) scaleX(0.5) scaleY(0.8) rotateX(28deg)'
+    "perspective(1200px) scaleX(0.5) scaleY(0.8) rotateX(40deg)"
   );
 
   useEffect(() => {
     const handleScroll = () => {
-      const section = document.querySelector('#landing-image');
+      const section = document.querySelector("#landing-image");
       if (section) {
         const rect = section.getBoundingClientRect();
         const windowHeight = window.innerHeight;
 
         if (rect.top < windowHeight && rect.bottom > 0) {
-          const progress = Math.max(0, Math.min(1, 1 - rect.top / windowHeight));
+          const progress = Math.max(
+            0,
+            Math.min(1, 1 - (rect.top-200) / windowHeight)
+          );
 
           const perspective = 1200;
           const translateY = 20 * (1 - progress);
           const scaleX = 0.8 + 0.2 * progress;
           const scaleY = 0.8 + 0.2 * progress;
-          const rotateX = 28 * (1 - progress);
+          const rotateX = 40 * (1 - progress);
 
           setTransformStyle(
             `perspective(${perspective}px) translateY(${translateY}px) scaleX(${scaleX}) scaleY(${scaleY}) rotateX(${rotateX}deg)`
           );
         } else if (rect.top > windowHeight) {
-          setTransformStyle('perspective(1200px) scaleX(0.8) scaleY(0.8) rotateX(28deg)');
+          setTransformStyle(
+            "perspective(1200px) scaleX(0.8) scaleY(0.8) rotateX(40deg)"
+          );
         } else if (rect.bottom < 0) {
-          setTransformStyle('perspective(1200px) scaleX(1) scaleY(1) rotateX(0deg)');
+          setTransformStyle(
+            "perspective(1200px) scaleX(1) scaleY(1) rotateX(0deg)"
+          );
         }
       }
     };
 
-    window.addEventListener('scroll', handleScroll);
+    window.addEventListener("scroll", handleScroll);
 
     return () => {
-      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener("scroll", handleScroll);
     };
   }, []);
 
   return (
-    <div className="bg-gradient-to-b flex from-gray-800 to-black">
-      <div className="w-full md:w-2/5 mt-40">
-        <div className="title w-full items-center text-center font-light text-5xl">
-          <span>FEATURES</span>
-        </div>
-        <div className=" h-screen flex items-center p-6 md:p-16 w-full">
-          <div
-            id="about"
-            className="rounded-lg flex flex-col justify-evenly items-center scrollbar-hide overflow-y-scroll h-full p-4 w-full border"
-          >
-            {images.map((src, index) => (
-              <div
-                className="aboutdiv flex w-full items-center justify-center"
-                key={index}
-              >
+    <div className="bg-gradient-to-b from-gray-800 to-black">
+      <div className="title w-full items-center text-center font-light text-5xl">
+        <span>FEATURES</span>
+      </div>
+      <div className="bg-gradient-to-b flex justify-evenl items-center">
+        <div className="w-full lg:w-5/12">
+          <div className=" h-screen flex items-center p-6 md:p-16 w-full">
+            <div
+              id="about"
+              className="rounded-lg flex flex-col justify-evenly items-center scrollbar-hide overflow-y-scroll h-full p-4 w-full border"
+            >
+              {images.map((src, index) => (
                 <div
-                  className={
-                    "border w-full rounded-3xl md:m-12 p-4 shadow-2xl bg-gradient-to-b from-gray-950 to-gray-800 flex flex-col justify-evenly items-center"
-                  }
-                  id={index + 1}
+                  className="aboutdiv flex w-full items-center justify-center"
+                  key={index}
                 >
-                  <img
-                    src={src[0]}
-                    className="rounded-3xl objchild"
-                    style={{ width: "250px", height: "250px" }}
-                    alt={`Image ${index + 1}`}
-                  />
-                  <div className="AboutText flex w-4/5 h-60 text-center items-center">
-                    <span> {src[1]}</span>
-                  </div>
-                </div>{" "}
+                  <div
+                    className={
+                      "border w-full rounded-3xl md:m-12 p-4 shadow-2xl bg-gradient-to-b from-gray-950 to-gray-800 flex flex-col justify-evenly items-center"
+                    }
+                    id={index + 1}
+                  >
+                    <img
+                      src={src[0]}
+                      className="rounded-3xl objchild"
+                      style={{ width: "250px", height: "250px" }}
+                      alt={`Image ${index + 1}`}
+                    />
+                    <div className="AboutText flex w-4/5 h-60 text-center items-center">
+                      <span> {src[1]}</span>
+                    </div>
+                  </div>{" "}
+                </div>
+              ))}
+            </div>
+            <div className=" h-full w-1">
+              <div className=" w-full h-full bg-gray-800">
+                <div
+                  className="bg-gradient-to-b from-cyan-900 to-cyan-100 w-full"
+                  style={{ height: `${scrollProgress * 100}%` }}
+                ></div>
               </div>
-            ))}
-          </div>
-          <div className=" h-full w-1">
-            <div className=" w-full h-full bg-gray-800">
-              <div
-                className="bg-gradient-to-b from-cyan-900 to-cyan-100 w-full"
-                style={{ height: `${scrollProgress * 100}%` }}
-              ></div>
             </div>
           </div>
         </div>
-      </div>
-      <div className="w-3/5 hidden md:flex items-center mt-40">
-        <div
-          id="landing-image"
-          className="hidden md:flex w-full justify-center rounded-md bg-background "
-          style={{
-            transformStyle: 'preserve-3d',
-            transformOrigin: 'center top',
-            transform: transformStyle,
-          }}
-        >
-          <video
-            src={videoSrc}
-            className="rounded-md w-full shadow-md duration-500 animate-in fade-in h-auto hover:shadow-lg"
-            autoPlay
-            muted
-            loop
-          />
+        <div className="w-6/12 hidden lg:flex items-center">
+          <div
+            id="landing-image"
+            className="hidden lg:flex w-full justify-center rounded-md bg-background "
+            style={{
+              transformStyle: "preserve-3d",
+              transformOrigin: "center top",
+              transform: transformStyle,
+            }}
+          >
+            <video
+              src={videoSrc}
+              className="rounded-md w-full shadow-md duration-500 animate-in fade-in h-auto hover:shadow-lg"
+              autoPlay
+              muted
+              loop
+            />
+          </div>
         </div>
       </div>
     </div>

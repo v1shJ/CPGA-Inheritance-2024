@@ -3,20 +3,20 @@ import {
   DisclosureButton,
   DisclosurePanel,
 } from "@headlessui/react";
-// import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
-// import { NavLink } from "react-router-dom";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 import { NavLink } from "react-router-dom";
 
 const navigation = [
   { name: "Home", to: "home", current: true },
   { name: "About", to: "about", current: false},
+  { name: "FAQs", to: "faqs", current: false },
 ];
 
 const handleScroll = (section) => {
   const Section = document.getElementById(section);
-  console.log(Section);
-  Section?.scrollIntoView({ behavior: "smooth" });
+  const yOffset = -70;
+  const y = Section?.getBoundingClientRect().top + window.pageYOffset + yOffset;
+  window.scrollTo({ top: y, behavior: "smooth" });
 };
 
 export default function MyNavbar() {
@@ -45,7 +45,9 @@ export default function MyNavbar() {
 
             {/* Logo */}
             <div className="flex flex-shrink-0 items-center">
-              <div className="text-3xl text-slate-300">CPGA</div>
+              <NavLink
+                onClick={() => handleScroll("home")}
+               className="text-3xl text-slate-300">CPGA</NavLink>
             </div>
 
             {/* Desktop menu */}

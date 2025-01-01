@@ -6,30 +6,49 @@ import "@fortawesome/fontawesome-free/css/all.min.css";
 import "./App.css";
 import Home from "./components/Home.jsx";
 import About from "./components/landingpages/about.jsx";
+import Discussion from "./components/discussion.jsx";
+import Chatbot from "./components/chatbot.jsx";
+import Profile from "./components/Profile.jsx";
+import Idform from "./components/Idform.jsx";
+
+function checkLogin(){
+  const token = localStorage.getItem("token");
+  return token ? true : false;
+}
 
 function App() {
-
-
   const router = createBrowserRouter([
     {
       path: "/",
-      element: <Landing />
+      element: checkLogin() ? <Home /> : <Landing />
     },
     {
       path: "/login",
-      element: <Login />
+      element: checkLogin() ? <Home /> : <Login />
     },
     {
       path: "/register",
-      element: <Signup />
-    },
-    {
-      path: "/home",
-      element: <Home />,
+      element: checkLogin() ? <Home /> : <Signup />
     },
     {
       path: "/about",
-      element: <About />,
+      element: checkLogin() ? <About /> : <Login />
+    },
+    {
+      path: "/discussion",
+      element: checkLogin() ? <Discussion /> : <Login />
+    },
+    {
+      path: "/chatbot",
+      element: checkLogin() ? <Chatbot /> : <Login />
+    },
+    {
+      path: "/profile",
+      element: checkLogin() ? <Profile /> : <Login />
+    },
+    {
+      path: "/getIds",
+      element: checkLogin() ? <Idform /> : <Login />
     }
   ]);
 

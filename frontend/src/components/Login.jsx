@@ -1,10 +1,51 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import axios from "axios";
 
 const Login = () => {
+
+  const BackendUrl = process.env.REACT_APP_BACKEND_URL;
+
+   const [formData, setFormData] = useState({
+    emailOrUsername: "",
+    password: "",
+  });
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prevData) => ({ ...prevData, [name]: value }));
+  };
+
+  const [error, setError] = useState("");
+
+  const handleSubmit = (e) => {
+    e.preventDefault(); // Prevent default form submission
+
+    if (!formData.emailOrUsername || !formData.password){
+      setError("Please fill in all fields");
+      return;
+    }
+
+    console.log(formData);
+
+    axios.post(`${BackendUrl}/api/user/login`, formData) 
+    .then((res) => {
+      const { token, user } = res.data;
+      localStorage.setItem("token", token);
+      localStorage.setItem("user", JSON.stringify(user));
+      window.location.href = "/";
+      alert("Login successful");
+      setError("");
+    })
+    .catch((err) => {
+      setError(err.response.data.message);
+    });
+
+  }
+
   return (
     <div className="flex items-center justify-center h-screen">
-      <div className="p-4 flex flex-col items-center shadow-2xl w-full h-full  bg-gradient-to-b from-black to-gray-800 justify-center">
+      <div className="p-4 flex flex-col gap-4 items-center shadow-2xl w-full h-full  bg-gradient-to-b from-black to-gray-800 justify-center">
         <form className="flex flex-col items-center gap-4 p-4 border rounded-2xl w-4/5 md:w-3/5">
           <p className="text-center text-[#64ffda] text-4xl">Login</p>
 
@@ -12,23 +53,27 @@ const Login = () => {
             <i className="fas fa-user text-[#64ffda]"></i>
             <input
               required
-              placeholder="Username"
+              placeholder="Username or Email"
               className="bg-transparent border-none outline-none w-full text-[#ccd6f6] pl-4"
               type="text"
-              name="username"
+              name="emailOrUsername"
+              onChange={handleChange}
             />
           </div>
           <div className="flex items-center border justify-center gap-2 p-4 bg-[#1b1b1b] rounded-xl shadow-inner w-full max-w-md">
             <i className="fas fa-lock text-[#64ffda]"></i>
             <input
-              placeholder="Paasword"
+              placeholder="Password"
               className="bg-transparent border-none outline-none w-full text-[#ccd6f6] pl-4"
               type="password"
               name="password"
+              onChange={handleChange}
             />
           </div>
           <div className="flex items-center justify-evenly w-full max-w-md">
-            <button className="cursor-pointer py-3 px-6 rounded-xl border border-[#64ffda] text-[#64ffda] font-bold transition-all duration-300 hover:bg-[#64ffda] hover:text-black hover:shadow-inner">
+            <button
+              onClick={handleSubmit}
+             className="cursor-pointer py-3 px-6 rounded-xl border border-[#64ffda] text-[#64ffda] font-bold transition-all duration-300 hover:bg-[#64ffda] hover:text-black hover:shadow-inner">
               Login
             </button>
             <div className="flex flex-col">
@@ -41,7 +86,11 @@ const Login = () => {
             <Link to="/" className="text-zinc-500">Forgot Password</Link>
         </form>
         <Link to="/" className="custom-btn mt-4">Home</Link>
+        {
+        error && <div className="text-red-500">{error}</div>
+        }
       </div>
+      
     </div>
   );
 };

@@ -5,7 +5,7 @@ export default function Home() {
   return (
     <div>
       <HomeNavbar />
-      <div className="mt-4 main flex flex-col items-center justify-center gap-4 bg-gradient-to-b from-black to-gray-900 ">
+      <div className="mt-2 main flex flex-col items-center justify-center gap-4 bg-gradient-to-b from-black to-gray-800 ">
         <div className="main1 min-h-48 border w-9/12 rounded-lg"></div>
 
         <div className="w-9/12 min-h-48 rounded-lg flex flex-wrap items-center justify-center lg:justify-between gap-4">
