@@ -18,6 +18,8 @@ const navigation = [
   { name: "Home", to: "/" },
   { name: "Discussion", to: "/discussion" },
   { name: "ChatBot", to: "/chatBot" },
+  { name: "Leaderboard", to: "/leaderboard" },
+  { name: "Daily Problems", to: "/dailyProblems" },
 ];
 
 function classNames(...classes) {
@@ -59,12 +61,12 @@ export default function Example() {
 
   function handleVerifyEmail() {
     const user = localStorage.getItem("user");
+    const { email, id } = JSON.parse(user);
     if (user) {
-      const {email, id } = JSON.parse(user);
       axios
         .post(
           `${backendUrl}/api/send-verification-email`,
-          {email, id },
+          { email, id },
           {
             headers: {
               Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -89,7 +91,7 @@ export default function Example() {
     >
       <div className="w-full flex items-center justify-center">
         <div className="relative flex w-4/5 h-16 items-center justify-between">
-          <div className="absolute inset-y-0 w-1/5 left-0 flex items-center sm:hidden">
+          <div className="absolute inset-y-0 w-1/5 left-0 flex items-center lg:hidden">
             {/* Mobile menu button */}
             <DisclosureButton className="group relative inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white">
               <span className="absolute -inset-0.5" />
@@ -107,7 +109,7 @@ export default function Example() {
           <div className="hidden sm:block shrink-0 text-white text-lg">
             CPGA
           </div>
-          <div className="hidden sm:ml-6 sm:block">
+          <div className="hidden lg:ml-6 lg:block">
             <div className="flex space-x-4">
               {navigation.map((item) => (
                 <NavLink
@@ -128,7 +130,7 @@ export default function Example() {
               ))}
             </div>
           </div>
-          <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
+          <div className="absolute inset-y-0 right-0 flex items-center pr-2 lg:static lg:inset-auto lg:ml-6 lg:pr-0">
             <button
               type="button"
               className="relative rounded-full p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
@@ -161,7 +163,9 @@ export default function Example() {
               >
                 <MenuItem>
                   <NavLink
-                    to="/profile"
+                    to={`/profile/${
+                      JSON.parse(localStorage.getItem("user")).id
+                    }`}
                     className="block px-4 py-2 text-sm text-white hover:bg-gray-800"
                   >
                     Profile
@@ -199,10 +203,10 @@ export default function Example() {
         </div>
       </div>
 
-      <DisclosurePanel className="sm:hidden">
+      <DisclosurePanel className="lg:hidden">
         <div className="space-y-1 px-2 pb-3 pt-2">
           {navigation.map((item) => (
-            <DisclosureButton
+            <NavLink
               key={item.name}
               as="a"
               to={item.to}
@@ -215,7 +219,7 @@ export default function Example() {
               )}
             >
               {item.name}
-            </DisclosureButton>
+            </NavLink>
           ))}
         </div>
       </DisclosurePanel>

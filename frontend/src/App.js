@@ -11,8 +11,10 @@ import Chatbot from "./components/chatbot.jsx";
 import Profile from "./components/Profile.jsx";
 import Idform from "./components/Idform.jsx";
 import VerifyEmail from "./components/verifyEmail.jsx";
+import Leaderboard from "./components/Leaderboard.jsx";
+import DailyProblems from "./components/DailyProblems.jsx";
 
-function checkLogin(){
+function checkLogin() {
   const token = localStorage.getItem("token");
   return token ? true : false;
 }
@@ -21,42 +23,49 @@ function App() {
   const router = createBrowserRouter([
     {
       path: "/",
-      element: checkLogin() ? <Home /> : <Landing />
+      element: checkLogin() ? <Home /> : <Landing />,
     },
     {
       path: "/login",
-      element: checkLogin() ? <Home /> : <Login />
+      element: checkLogin() ? <Home /> : <Login />,
     },
     {
       path: "/register",
-      element: checkLogin() ? <Home /> : <Signup />
+      element: checkLogin() ? <Home /> : <Signup />,
     },
     {
       path: "/about",
-      element: checkLogin() ? <About /> : <Login />
+      element: checkLogin() ? <About /> : <Login />,
     },
     {
       path: "/discussion",
-      element: checkLogin() ? <Discussion /> : <Login />
+      element: checkLogin() ? <Discussion /> : <Login />,
     },
     {
       path: "/chatbot",
-      element: checkLogin() ? <Chatbot /> : <Login />
+      element: checkLogin() ? <Chatbot /> : <Login />,
     },
     {
-      path: "/profile",
-      element: checkLogin() ? <Profile /> : <Login />
+      path: "/profile/:id",
+      element: checkLogin() ? <Profile /> : <Login />,
     },
     {
       path: "/getIds",
-      element: checkLogin() ? <Idform /> : <Login />
+      element: checkLogin() ? <Idform /> : <Login />,
     },
     {
       path: "/verify-email",
-      element: <VerifyEmail />
+      element: <VerifyEmail />,
+    },
+    {
+      path: "/leaderboard",
+      element: checkLogin() ? <Leaderboard /> : <Login />,
+    },
+    {
+      path: "/dailyproblems",
+      element: checkLogin() ? <DailyProblems /> : <Login />,
     }
   ]);
-
 
   return (
     <div className="h-fit">

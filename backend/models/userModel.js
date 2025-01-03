@@ -30,7 +30,11 @@ const userSchema = new mongoose.Schema({
   emailVerified: {
     type: Boolean,
     default: false,
-  }
+  },
+  dailyPoints: {
+    type: Number,
+    default: 0,
+  },
 });
 
 const User = mongoose.model("User", userSchema);

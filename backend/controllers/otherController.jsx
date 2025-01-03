@@ -30,6 +30,7 @@ const getProfile = async (req, res) => {
     image: user.image,
     platformIds: user.platformIds,
     emailVerified: user.emailVerified,
+    dailyPoints: user.dailyPoints,
   };
   if (user) {
     res.json(User);
@@ -102,9 +103,16 @@ const verifyEmail = async (req, res) => {
   }
 };
 
+const getAllUsers = async (req, res) => {
+  const users = await UserModel.find();
+  console.log(users);
+  res.json(users);
+}
+
 module.exports = {
   addPlatforms,
   getProfile,
   sendVerificationEmail,
-  verifyEmail
+  verifyEmail,
+  getAllUsers
 };
