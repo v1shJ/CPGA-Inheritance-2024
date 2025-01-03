@@ -1,9 +1,9 @@
 import { useEffect } from 'react';
-import { useParams } from "react-router-dom";
 import axios from 'axios';
+import { useParams } from "react-router-dom";
 const backendURL = process.env.REACT_APP_BACKEND_URL;
 
-function useFetchCCData(setCCData) {
+function useFetchCFData(setCFData) {
     let { id } = useParams();
     useEffect(() => {
       const user = JSON.parse(localStorage.getItem("user"));
@@ -20,19 +20,18 @@ function useFetchCCData(setCCData) {
                   Authorization: `Bearer ${token}`,
                 },
               });
-            // console.log(response.data.platformIds[0].CodeChef);
-            const platformID = response.data.platformIds[0].CodeChef;
+            // console.log(response.data.platformIds[0].Codeforces);
+            const platformID = response.data.platformIds[0].Codeforces;
             if (platformID) {
               console.log(platformID);
             } else {
-              console.log("Platform ID for CodeChef not found");
+              console.log("Platform ID for CodeForces not found");
             }
             if (platformID) {
-              const ccResponse = await axios.get(
-                `https://codechef-api.vercel.app/handle/${platformID}`
+              const cfResponse = await axios.get(
+                `https://codeforces.com/api/user.rating?handle=${platformID}`
               );
-              setCCData(ccResponse.data);
-              console.log(ccResponse.data);
+              setCFData(cfResponse.data);
             }
           } catch (err) {
             console.log(err.message);
@@ -44,4 +43,4 @@ function useFetchCCData(setCCData) {
     }, []);
 }
 
-export default useFetchCCData;
+export default useFetchCFData;

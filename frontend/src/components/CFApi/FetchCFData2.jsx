@@ -3,7 +3,7 @@ import axios from 'axios';
 import { useParams } from "react-router-dom";
 const backendURL = process.env.REACT_APP_BACKEND_URL;
 
-function useFetchCFData(setCFData) {
+function useFetchCFData2(setCFData2) {
     let { id } = useParams();
     useEffect(() => {
       const user = JSON.parse(localStorage.getItem("user"));
@@ -29,10 +29,9 @@ function useFetchCFData(setCFData) {
             }
             if (platformID) {
               const cfResponse = await axios.get(
-                `https://codeforces.com/api/user.rating?handle=${platformID}`
+                `https://codeforces.com/api/user.status?handle=${platformID}&from=1`
               );
-              setCFData(cfResponse.data);
-              console.log(cfResponse.data);
+              setCFData2(cfResponse.data);
             }
           } catch (err) {
             console.log(err.message);
@@ -44,4 +43,4 @@ function useFetchCFData(setCFData) {
     }, []);
 }
 
-export default useFetchCFData;
+export default useFetchCFData2;

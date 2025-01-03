@@ -1,0 +1,23 @@
+.color-scale-0 {
+  fill: #2b2c2a;
+}
+.color-scale-1 {
+  fill: #aaea33;
+}
+.color-scale-2 {
+  fill: #539826;
+}
+.color-scale-3 {
+  fill: #298226;
+}
+.color-scale-4 {
+  fill: #045209;
+}
+.border{
+    stroke: #252323;
+    stroke-width: 0.5;
+}
+.react-calendar-heatmap .weekday-label { 
+    color: white; 
+}
+.react-tooltip { background-color: rgb(0, 0, 0); color: rgb(26, 162, 153); border-radius: 5px; padding: 5px; } 
