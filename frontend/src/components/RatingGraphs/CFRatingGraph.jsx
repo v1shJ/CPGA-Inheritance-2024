@@ -20,7 +20,7 @@ ChartJS.register(
 );
 
 const RatingGraph = ({ ratingData }) => {
-  console.log(ratingData);
+  // console.log(ratingData);
 
   const labels = ratingData.map((item) => {
     const month = new Date(item.ratingUpdateTimeSeconds * 1000);

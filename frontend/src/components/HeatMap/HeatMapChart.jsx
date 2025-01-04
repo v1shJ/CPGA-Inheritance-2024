@@ -22,8 +22,8 @@ const HeatMapChart = ({ heatMapData }) => {
   };
 
 return (
-    <div className="text-white">
-      <h3 className="text-white">Heatmap Visualization</h3>
+    <div className="text-white flex flex-col items-center justify-center gap-2">
+      <h3 className="text-white text-center text-lg">Heatmap Visualization</h3>
       <CalendarHeatmap
         startDate={new Date("2024-04-01")}
         endDate={new Date("2024-12-31")}
