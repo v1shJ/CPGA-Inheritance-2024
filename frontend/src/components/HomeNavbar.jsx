@@ -27,8 +27,7 @@ function classNames(...classes) {
 }
 
 function handleLogout() {
-  localStorage.removeItem("token");
-  localStorage.removeItem("user");
+  localStorage.clear();
   window.location.href = "/";
 }
 
@@ -50,6 +49,7 @@ export default function Example() {
           const { image, emailVerified } = response.data;
           setImage(image);
           setEmailVerified(emailVerified);
+          console.log(response.data);
         })
         .catch((error) => {
           console.error("Error fetching user data from backend:", error);
@@ -162,14 +162,14 @@ export default function Example() {
                 className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-gradient-to-b from-gray-700 to-gray-800 py-1 shadow-lg ring-1 ring-black/5 transition focus:outline-none data-[closed]:scale-95 data-[closed]:transform data-[closed]:opacity-0 data-[enter]:duration-100 data-[leave]:duration-75 data-[enter]:ease-out data-[leave]:ease-in"
               >
                 <MenuItem>
-                  <NavLink
-                    to={`/profile/${
+                  <a // Re render the page when came from different profile page
+                    href={`/profile/${
                       JSON.parse(localStorage.getItem("user")).id
                     }`}
                     className="block px-4 py-2 text-sm text-white hover:bg-gray-800"
                   >
                     Profile
-                  </NavLink>
+                  </a>
                 </MenuItem>
                 {!emailVerified && (
                   <MenuItem>

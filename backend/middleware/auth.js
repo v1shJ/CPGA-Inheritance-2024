@@ -3,7 +3,6 @@ const secretKey = process.env.SECRET_KEY;
 
 const authenticate = (req, res, next) => {
     const token = req.headers['authorization'] ? req.headers['authorization'].split(' ')[1] : null;
-    // console.log(token);
     if (!token) {
         console.log('Access denied. No token provided.');
         return res.status(401).json({ message: 'Access denied. No token provided.' });

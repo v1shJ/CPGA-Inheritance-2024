@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 import HomeNavbar from "./HomeNavbar";
 import HeatMapChart from "./HeatMap/HeatMapChart";
 import CCRatingGraph from "./RatingGraphs/CCRatingGraph";
@@ -11,48 +12,89 @@ import {
   CombineHeatMapData,
   ConvertLCData,
 } from "./utils/modifyData";
-import {
-  useFetchCFData,
-  useFetchCFData2,
-  useFetchLCHeatMapData,
-  useFetchLCContestData,
-  useFetchCFUserInfo,
-  useFetchCCData,
-} from "./Api";
+import {FetchData, fetchCodeChefData} from "./Api";
+import { use } from "react";
+
+const getFromLocalStorage = (key) => {
+  const data = localStorage.getItem(key);
+  return data ? JSON.parse(data) : null;
+};
+
+const setToLocalStorage = (key, value) => {
+  localStorage.setItem(key, JSON.stringify(value));
+};
+
+const shouldFetchData = (key, hours = 3) => {
+  const storedData = getFromLocalStorage(key);
+  if (!storedData || !storedData.timestamp) return true;
+  const now = new Date().getTime();
+  const elapsedHours = (now - storedData.timestamp) / (1000 * 60 * 60);
+  return elapsedHours >= hours;
+};
+
+// Custom hook for data fetching with local storage caching
+const useFetchWithLocalStorage = (key, fetchFunction, setData) => {
+  let { id } = useParams();
+  const user = JSON.parse(localStorage.getItem("user"));
+  const token = localStorage.getItem("token");
+  if (!id) { // Since home page doesn't have id in url
+    id = user.id;
+  }
+  useEffect(() => {
+    const fetchData = async () => {
+      if (id!=user.id || shouldFetchData(key)) {
+        const data = await fetchFunction(key, token , id);
+        if(id==user.id) setToLocalStorage(key, { data, timestamp: new Date().getTime() });
+        setData(data);
+      } else {
+        const cachedData = getFromLocalStorage(key);
+        setData(cachedData.data);
+      }
+    };
+    fetchData();
+  }, [key, fetchFunction, setData, id, token]);
+};
 
 export default function Home() {
-  // For everything related to CodeChef
+
   const [CCData, setCCData] = useState(null);
-  useFetchCCData(setCCData);
+  const [CFData, setCFData] = useState(null);
+  const [CFData2, setCFData2] = useState(null);
+  const [CFUserInfo, setCFUserInfo] = useState(null);
+  const [LCData, setLCData] = useState(null);
+  const [LCContestData, setLCContestData] = useState(null);
+  const [CCProblemsSolved, setCCProblemsSolved] = useState(null);
 
-  // For everything related to CodeForces
-  const [CFData, setCFData] = useState(null); // For rating graph and number of contests
-  useFetchCFData(setCFData);
+  // Replace with your fetch functions
+  const fetchData = FetchData;
 
-  const [CFData2, setCFData2] = useState(null); // For heatmap data and number of solved problems
-  useFetchCFData2(setCFData2);
-
-  const [CFUserInfo, setCFUserInfo] = useState(null); // For user info like rank and rating
-  useFetchCFUserInfo(setCFUserInfo);
-
-  // For everything related to LeetCode
-  const [LCData, setLCData] = useState(null); // For heatmap data !!!!!!! limitation of api calls !!!!!!!
-  useFetchLCHeatMapData(setLCData);
-
-  const [LCContestData, setLCContestData] = useState(null); // For rating graph and number of contests attended
-  useFetchLCContestData(setLCContestData);
-
-  // Ensure all data is fetched successfully
+  useFetchWithLocalStorage("CCData", fetchData, setCCData);
+  useFetchWithLocalStorage("CFData", fetchData, setCFData);
+  useFetchWithLocalStorage("CFData2", fetchData, setCFData2);
+  useFetchWithLocalStorage("CFUserInfo", fetchData, setCFUserInfo);
+  useFetchWithLocalStorage("LCData", fetchData, setLCData);
+  // useFetchWithLocalStorage("LCContestData", fetchData, setLCContestData);
+  useFetchWithLocalStorage("CCSolved", fetchCodeChefData, setCCProblemsSolved);
 
   // For changing platform on display
   const [platform, setPlatform] = useState("CodeChef");
   const handleChange = (e) => {
     setPlatform(e.target.value);
-  };
+  }; 
 
   const allDataFetched =
     CCData && CFData && CFData2 && LCData && CFUserInfo && LCContestData;
-  if (!allDataFetched) {
+  const [timeoutReached, setTimeoutReached] = useState(false);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setTimeoutReached(true);
+    }, 3000); // 30 seconds
+
+    return () => clearTimeout(timer);
+  }, []);
+
+  if (!allDataFetched && !timeoutReached) {
     return (
       <div className="h-screen flex flex-col items-center justify-center gap-4">
         <Loader />
@@ -61,12 +103,12 @@ export default function Home() {
     );
   }
 
-  let CFConvertedData = {}; // For converting CFData2 to required format
-  CFConvertedData = ConvertCFData(CFData2.result);
+  let CFConvertedData = ConvertCFData(CFData2? CFData2.result: [] ); // For converting CFData2 to required format
+  let LCConvertedData = ConvertLCData(LCData? LCData.submissionCalendar: []); // For converting LCData to required format 
   const heatmapData = {
-    CodeChef: CCData.heatMap,
-    CodeForces: CFConvertedData.heatMapData,
-    LeetCode: ConvertLCData(LCData.submissionCalendar),
+    CodeChef: CCData? CCData.heatMap: [],
+    CodeForces: CFConvertedData? CFConvertedData.heatMapData: [],
+    LeetCode: LCConvertedData? LCConvertedData: [],
   };
 
   const combinedheatMapData = CombineHeatMapData(
@@ -76,40 +118,40 @@ export default function Home() {
   );
 
   const solvedCount = {
-    CodeChef: 181,
-    CodeForces: parseInt(CFConvertedData.solved),
-    LeetCode: parseInt(LCData.totalSolved),
+    CodeChef:  CCProblemsSolved? CCProblemsSolved:0,
+    CodeForces: CFConvertedData? parseInt(CFConvertedData.solved): 0,
+    LeetCode: LCData? parseInt(LCData.totalSolved): 0,
   };
   const totalSolved =
     solvedCount.CodeChef + solvedCount.CodeForces + solvedCount.LeetCode;
 
   const contestCount = {
-    CodeChef: parseInt(CCData.ratingData.length),
-    CodeForces: parseInt(CFData.result.length),
-    LeetCode: parseInt(LCContestData.contestParticipation.length),
+    CodeChef: CCData? parseInt(CCData.ratingData.length):0,
+    CodeForces: CFData? parseInt(CFData.result.length): 0,
+    LeetCode: LCContestData? parseInt(LCContestData.contestParticipation.length) : 0,
   };
   const totalContests =
     contestCount.CodeChef + contestCount.CodeForces + contestCount.LeetCode;
 
   const ratingData = {
     CodeChef: {
-      current: CCData.currentRating,
-      highest: CCData.highestRating,
+      current: CCData? CCData.currentRating: 0,
+      highest: CCData? CCData.highestRating: 0,
     },
     CodeForces: {
-      current: CFUserInfo.result[0].rating,
-      highest: CFUserInfo.result[0].maxRating,
+      current: CFUserInfo? CFUserInfo.result[0].rating: 0,
+      highest: CFUserInfo? CFUserInfo.result[0].maxRating:0,
     },
     LeetCode: {
-      current: parseInt(LCContestData.contestRating, 10),
-      // "highest": parseInt(LCContestData.contestRating, 10)
+      current: LCContestData? parseInt(LCContestData.contestRating, 10): 0,
+      "highest": LCContestData? parseInt(LCContestData.contestRating, 10):0
     },
   };
 
   const rankData = {
-    CodeChef: CCData.stars,
-    CodeForces: CFUserInfo.result[0].rank,
-    LeetCode: LCContestData.contestBadges.name,
+    CodeChef: CCData? CCData.stars : "Data not available",
+    CodeForces: CFUserInfo? CFUserInfo.result[0].rank : "Data not available",
+    LeetCode: LCContestData? (LCContestData.contestBadges? LCContestData.contestBadges.name:"NONE"): "Data not available",
   };
 
   const totalActiveDays = combinedheatMapData.length;
