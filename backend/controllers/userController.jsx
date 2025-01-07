@@ -91,6 +91,7 @@ const loginUser = async (req, res) => {
         username: user.username,
         email: user.email,
         image: user.image,
+        platformIds: user.platformIds
       },
     });
   });

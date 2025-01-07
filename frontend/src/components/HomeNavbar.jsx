@@ -49,7 +49,6 @@ export default function Example() {
           const { image, emailVerified } = response.data;
           setImage(image);
           setEmailVerified(emailVerified);
-          console.log(response.data);
         })
         .catch((error) => {
           console.error("Error fetching user data from backend:", error);
@@ -106,7 +105,7 @@ export default function Example() {
               />
             </DisclosureButton>
           </div>
-          <div className="hidden sm:block shrink-0 text-white text-lg">
+          <div className="hidden lg:block shrink-0 text-white text-lg">
             CPGA
           </div>
           <div className="hidden lg:ml-6 lg:block">

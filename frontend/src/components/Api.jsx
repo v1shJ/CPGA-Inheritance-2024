@@ -24,7 +24,8 @@ export function FetchData(key, token, id) {
           else if(key === "CFData" || key === "CFData2" || key === "CFUserInfo") platform = "Codeforces";
           else if(key === "LCData" || key === "LCContestData") platform = "LeetCode";
 
-          const platformID = response.data.platformIds[0][platform];
+          console.log(response.data);
+           const platformID =response.data.platformIds[0][platform];
 
           if (platformID) {
             console.log(platformID); 

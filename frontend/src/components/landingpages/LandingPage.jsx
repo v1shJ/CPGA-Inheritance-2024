@@ -15,7 +15,7 @@ export default function LandingPage() {
               <span><h2 className="text-cyan-200"> with Ease"</h2></span> 
               <span className="text-2xl text-cyan-100">Personalized Guidance, Daily Challenges, and Expert Insights – Your Ultimate Companion for CP Success.</span>
             </div>
-            <NavLink to="/registe" className=" custom-btn mt-5 animate__animated animate__pulse animate__infinite">
+            <NavLink to="/register" className=" custom-btn mt-5 animate__animated animate__pulse animate__infinite">
               GET STARTED
             </NavLink>
           </div>

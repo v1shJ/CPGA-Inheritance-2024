@@ -49,8 +49,8 @@ return (
                                 <img
                                     src={
                                         user.image
-                                            ? user.image
-                                            : `${backendUrl}/images/uploads/default.jpg`
+                                        ? `${backendUrl}/images/uploads/${user.image}`
+                                        : `${backendUrl}/images/uploads/default.jpg`
                                     }
                                     alt={user.name}
                                     className="w-12 h-12 rounded-full"

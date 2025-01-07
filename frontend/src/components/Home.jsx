@@ -7,55 +7,16 @@ import CFRatingGraph from "./RatingGraphs/CFRatingGraph";
 import LCRatingGraph from "./RatingGraphs/LCRatingGraph";
 import CPStatsPieChart from "./PieChart";
 import { Loader } from "./loader/loader.jsx";
+import useFetchWithLocalStorage from "./FetchWithLocalStorage.jsx";
 import {
   ConvertCFData,
   CombineHeatMapData,
   ConvertLCData,
 } from "./utils/modifyData";
-import {FetchData, fetchCodeChefData} from "./Api";
-import { use } from "react";
-
-const getFromLocalStorage = (key) => {
-  const data = localStorage.getItem(key);
-  return data ? JSON.parse(data) : null;
-};
-
-const setToLocalStorage = (key, value) => {
-  localStorage.setItem(key, JSON.stringify(value));
-};
-
-const shouldFetchData = (key, hours = 3) => {
-  const storedData = getFromLocalStorage(key);
-  if (!storedData || !storedData.timestamp) return true;
-  const now = new Date().getTime();
-  const elapsedHours = (now - storedData.timestamp) / (1000 * 60 * 60);
-  return elapsedHours >= hours;
-};
-
-// Custom hook for data fetching with local storage caching
-const useFetchWithLocalStorage = (key, fetchFunction, setData) => {
-  let { id } = useParams();
-  const user = JSON.parse(localStorage.getItem("user"));
-  const token = localStorage.getItem("token");
-  if (!id) { // Since home page doesn't have id in url
-    id = user.id;
-  }
-  useEffect(() => {
-    const fetchData = async () => {
-      if (id!=user.id || shouldFetchData(key)) {
-        const data = await fetchFunction(key, token , id);
-        if(id==user.id) setToLocalStorage(key, { data, timestamp: new Date().getTime() });
-        setData(data);
-      } else {
-        const cachedData = getFromLocalStorage(key);
-        setData(cachedData.data);
-      }
-    };
-    fetchData();
-  }, [key, fetchFunction, setData, id, token]);
-};
+import { FetchData, fetchCodeChefData } from "./Api";
 
 export default function Home() {
+
 
   const [CCData, setCCData] = useState(null);
   const [CFData, setCFData] = useState(null);
@@ -64,26 +25,100 @@ export default function Home() {
   const [LCData, setLCData] = useState(null);
   const [LCContestData, setLCContestData] = useState(null);
   const [CCProblemsSolved, setCCProblemsSolved] = useState(null);
+  const { id } = useParams();
+  const [userHandle, setUserHandle] = useState({});
 
+  useEffect(() => {
+    const user = localStorage.getItem("user");
+    if (user) {
+      setUserHandle(JSON.parse(user));
+    }
+  }, []);
   // Replace with your fetch functions
   const fetchData = FetchData;
+  let specialRefresh = false;
 
-  useFetchWithLocalStorage("CCData", fetchData, setCCData);
-  useFetchWithLocalStorage("CFData", fetchData, setCFData);
-  useFetchWithLocalStorage("CFData2", fetchData, setCFData2);
-  useFetchWithLocalStorage("CFUserInfo", fetchData, setCFUserInfo);
-  useFetchWithLocalStorage("LCData", fetchData, setLCData);
-  // useFetchWithLocalStorage("LCContestData", fetchData, setLCContestData);
-  useFetchWithLocalStorage("CCSolved", fetchCodeChefData, setCCProblemsSolved);
+  const fetchCCData = useFetchWithLocalStorage("CCData", fetchData, setCCData, specialRefresh);
+  const fetchCCSolved = useFetchWithLocalStorage(
+    "CCSolved",
+    fetchData,
+    setCCProblemsSolved,
+    specialRefresh
+  );
+  const fetchCFData = useFetchWithLocalStorage("CFData", fetchData, setCFData, specialRefresh);
+  const fetchCFData2 = useFetchWithLocalStorage(
+    "CFData2",
+    fetchData,
+    setCFData2,
+    specialRefresh
+  );
+  const fetchCFUserInfo = useFetchWithLocalStorage(
+    "CFUserInfo",
+    fetchData,
+    setCFUserInfo,
+    specialRefresh
+  );
+  const fetchLCData = useFetchWithLocalStorage("LCData", fetchData, setLCData, specialRefresh);
+  const fetchLCContestData = useFetchWithLocalStorage(
+    "LCContestData",
+    fetchData,
+    setLCContestData,
+    specialRefresh
+  );
+  
+  
+    const platforms = [
+      {
+        name: "LeetCode",
+        faviconUrl: "https://leetcode.com/favicon.ico",
+        link: userHandle?.platformIds?.[0]?.LeetCode 
+          ? `https://leetcode.com/u/${userHandle.platformIds[0].LeetCode}` 
+          : "#",
+      },
+      {
+        name: "CodeChef",
+        faviconUrl: "https://www.codechef.com/favicon.ico",
+        link: userHandle?.platformIds?.[0]?.CodeChef 
+          ? `https://www.codechef.com/users/${userHandle.platformIds[0].CodeChef}` 
+          : "#",
+      },
+      {
+        name: "CodeForces",
+        faviconUrl: "https://codolio.com/icons/codeforces.png",
+        link: userHandle?.platformIds?.[0]?.Codeforces 
+          ? `https://codeforces.com/profile/${userHandle.platformIds[0].Codeforces}` 
+          : "#",
+      },
+    ];
 
+  // Handle button click for refreshing data
+  const handleRefresh = (platform) => {
+    console.log("Refreshing data for", platform);
+
+    if (platform === "CodeChef") {
+      fetchCCData(true); // Refresh CodeChef data
+      fetchCCSolved(true); // Refresh CodeChef solved problems
+    } else if (platform === "CodeForces") {
+      fetchCFData(true); // Refresh CodeForces data
+      fetchCFData2(true); // Refresh CodeForces data2
+      fetchCFUserInfo(true); // Refresh CodeForces user info
+    } else if (platform === "LeetCode") {
+      fetchLCData(true); // Refresh LeetCode data
+      fetchLCContestData(true); // Refresh LeetCode contest data
+    }
+    // specialRefresh = false;
+  };
+  
   // For changing platform on display
   const [platform, setPlatform] = useState("CodeChef");
   const handleChange = (e) => {
     setPlatform(e.target.value);
-  }; 
+  };
+
+  console.log(CCData, CFData, CFData2, LCData, CFUserInfo, LCContestData);
 
   const allDataFetched =
-    CCData && CFData && CFData2 && LCData && CFUserInfo && LCContestData;
+    CCData && CFData && CFData2 && LCData && CFUserInfo && LCContestData && CCProblemsSolved && userHandle;
   const [timeoutReached, setTimeoutReached] = useState(false);
 
   useEffect(() => {
@@ -98,17 +133,19 @@ export default function Home() {
     return (
       <div className="h-screen flex flex-col items-center justify-center gap-4">
         <Loader />
-        <div className="text-lg text-white">If it is taking time, Refresh Page</div>
+        <div className="text-lg text-white">
+          If it is taking time, Refresh Page
+        </div>
       </div>
     );
   }
 
-  let CFConvertedData = ConvertCFData(CFData2? CFData2.result: [] ); // For converting CFData2 to required format
-  let LCConvertedData = ConvertLCData(LCData? LCData.submissionCalendar: []); // For converting LCData to required format 
+  let CFConvertedData = ConvertCFData(CFData2 ? CFData2.result : []); // For converting CFData2 to required format
+  let LCConvertedData = ConvertLCData(LCData ? LCData.submissionCalendar : []); // For converting LCData to required format
   const heatmapData = {
-    CodeChef: CCData? CCData.heatMap: [],
-    CodeForces: CFConvertedData? CFConvertedData.heatMapData: [],
-    LeetCode: LCConvertedData? LCConvertedData: [],
+    CodeChef: CCData ? CCData.heatMap : [],
+    CodeForces: CFConvertedData ? CFConvertedData.heatMapData : [],
+    LeetCode: LCConvertedData ? LCConvertedData : [],
   };
 
   const combinedheatMapData = CombineHeatMapData(
@@ -118,40 +155,50 @@ export default function Home() {
   );
 
   const solvedCount = {
-    CodeChef:  CCProblemsSolved? CCProblemsSolved:0,
-    CodeForces: CFConvertedData? parseInt(CFConvertedData.solved): 0,
-    LeetCode: LCData? parseInt(LCData.totalSolved): 0,
+    CodeChef: CCProblemsSolved ? CCProblemsSolved : 0,
+    CodeForces: CFConvertedData ? parseInt(CFConvertedData.solved) : 0,
+    LeetCode: LCData ? parseInt(LCData.totalSolved) : 0,
   };
   const totalSolved =
     solvedCount.CodeChef + solvedCount.CodeForces + solvedCount.LeetCode;
 
   const contestCount = {
-    CodeChef: CCData? parseInt(CCData.ratingData.length):0,
-    CodeForces: CFData? parseInt(CFData.result.length): 0,
-    LeetCode: LCContestData? parseInt(LCContestData.contestParticipation.length) : 0,
+    CodeChef: CCData ? parseInt(CCData.ratingData.length) : 0,
+    CodeForces: CFData ? parseInt(CFData.result.length) : 0,
+    LeetCode: LCContestData
+      ? parseInt(
+          LCContestData.contestParticipation
+            ? LCContestData.contestParticipation.length
+            : 0
+        )
+      : 0,
   };
   const totalContests =
     contestCount.CodeChef + contestCount.CodeForces + contestCount.LeetCode;
 
   const ratingData = {
     CodeChef: {
-      current: CCData? CCData.currentRating: 0,
-      highest: CCData? CCData.highestRating: 0,
+      current: CCData ? CCData.currentRating : 0,
+      highest: CCData ? CCData.highestRating : 0,
     },
     CodeForces: {
-      current: CFUserInfo? CFUserInfo.result[0].rating: 0,
-      highest: CFUserInfo? CFUserInfo.result[0].maxRating:0,
+      current: CFUserInfo ? CFUserInfo.result[0].rating : 0,
+      highest: CFUserInfo ? CFUserInfo.result[0].maxRating : 0,
     },
     LeetCode: {
-      current: LCContestData? parseInt(LCContestData.contestRating, 10): 0,
-      "highest": LCContestData? parseInt(LCContestData.contestRating, 10):0
+      current: LCContestData ? parseInt(LCContestData.contestRating, 10) : 0,
+      highest: LCContestData ? parseInt(LCContestData.contestRating, 10) : 0,
     },
   };
 
   const rankData = {
-    CodeChef: CCData? CCData.stars : "Data not available",
-    CodeForces: CFUserInfo? CFUserInfo.result[0].rank : "Data not available",
-    LeetCode: LCContestData? (LCContestData.contestBadges? LCContestData.contestBadges.name:"NONE"): "Data not available",
+    CodeChef: CCData ? CCData.stars : "Data not available",
+    CodeForces: CFUserInfo ? CFUserInfo.result[0].rank : "Data not available",
+    LeetCode: LCContestData
+      ? LCContestData.contestBadges
+        ? LCContestData.contestBadges.name
+        : "NONE"
+      : "Data not available",
   };
 
   const totalActiveDays = combinedheatMapData.length;
@@ -161,6 +208,38 @@ export default function Home() {
       <div className="h-16 mt-2">
         <HomeNavbar />
       </div>
+      { !id && 
+        <div>
+          <div className="flex flex-wrap justify-center items-center gap-4 md:gap-8 mt-4">
+            {platforms.map((platform) => (
+              <div
+                className="flex items-center space-x-2 md:gap-2 bg-cyan-950 text-white p-2 border rounded-lg"
+                key={platform.name}
+              >
+                <img
+                  src={platform.faviconUrl}
+                  alt={platform.name}
+                  className="w-6 h-6"
+                />
+                <a href={platform.link} target="_blank" rel="noreferrer">
+                  {platform.name}
+                </a>
+                <button
+                  onClick={() => {
+                    handleRefresh(platform.name);
+                  }}
+                >
+                  <i className="fas fa-solid fa-refresh text-[#e1edea]"></i>
+                </button>
+                <a
+                  href={platform.link}
+                  className="fas fa-solid fa-arrow-up-right-from-square text-[#e1edea]"
+                ></a>
+              </div>
+            ))}
+          </div>
+        </div>
+    }
       <div className="mt-2 main flex flex-col gap-8 items-center justify-cente bg-gradient-to-b from-black to-gray-800 ">
         <div className="w-11/12 rounded-lg flex flex-wrap items-center justify-center gap-4">
           <div className=" h-full min-h-48 flex flex-wrap items-center justify-center gap-4">
