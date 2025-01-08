@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
+import { showSuccessToast, showErrorToast, showInfoToast, showCustomToast, showPromiseToast } from "./toastify.jsx";
+import { ToastContainer, toast} from 'react-toastify';
 
 const Form = () => {
   const backendUrl = process.env.REACT_APP_BACKEND_URL;
@@ -46,9 +48,8 @@ const Form = () => {
       !formData.password
     ) {
       setError(
-        "Please fill in all required fields (Name, Phone, Email, Password)."
+        "Please fill in all required fields (Name, Phone, Email, Password)"
       );
-      // console.log({ error });
       return;
     }
 
@@ -83,7 +84,7 @@ const Form = () => {
       localStorage.setItem("user", JSON.stringify(response.data.user));
       // console.log(response);
       
-      alert("user added successfully"); // Notify user of success
+      showSuccessToast("User added successfully"); // Notify user of success
       setFormData({
         file: "",
         name: "",
@@ -97,9 +98,7 @@ const Form = () => {
       setError("");
       window.location.replace("/getIds");
     } catch (err) {
-      console.log(err.response);
       setError(err.response.data.message);
-      // console.error(err);
     }
   };
 
@@ -112,9 +111,10 @@ const Form = () => {
         >
           <div>
             {error && (
-              <div className="bg-red-500 text-white p-4 rounded-lg text-center mt-4">
-                {error}
-              </div>
+              <>
+                {showErrorToast(error)}
+                {setError("")}
+              </>
             )}
           </div>
           <p className="text-center text-[#64ffda] text-3xl">Register</p>
@@ -236,6 +236,13 @@ const Form = () => {
           Home
         </Link>
       </div>
+      <ToastContainer
+                position="top-right"
+                autoClose={3000}
+                hideProgressBar={false}
+                closeOnClick
+                pauseOnHover
+            />
     </div>
   );
 };

@@ -24,7 +24,7 @@ Chart.register(
 
 const CCRatingGraph = ({ ratingData }) => {
   if (!ratingData) {
-    return <h1 className="text-cyan-400">No contest participation data available</h1>;
+    return <h1 className="text-red-400">No contest participation data available</h1>;
   }
   // Prepare data for the graph
   const labels = ratingData.map((entry) =>

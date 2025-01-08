@@ -15,9 +15,8 @@ import {
 Chart.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 
 const LCRatingGraph = ({ contestParticipation }) => {
-
   if (!contestParticipation) {
-    return <h1 className="text-cyan-400">No contest participation data available</h1>;
+    return <h1 className="text-red-400">No contest participation data available</h1>;
   }
 
   // Prepare data for the graph

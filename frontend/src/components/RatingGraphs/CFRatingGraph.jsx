@@ -20,9 +20,8 @@ ChartJS.register(
 );
 
 const RatingGraph = ({ ratingData }) => {
-  // console.log(ratingData);
   if (!ratingData) {
-    return <h1 className="text-cyan-400">No contest participation data available</h1>;
+    return <h1 className="text-red-400">No contest participation data available</h1>;
   }
 
   const labels = ratingData.map((item) => {
@@ -47,7 +46,6 @@ const RatingGraph = ({ ratingData }) => {
         data: ratings,
         borderColor: "rgba(75, 192, 192, 1)",
         backgroundColor: "rgba(75, 192, 192, 0.2)",
-        fill: true,
       },
     ],
   };

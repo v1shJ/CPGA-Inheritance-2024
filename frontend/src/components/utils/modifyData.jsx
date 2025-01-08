@@ -15,6 +15,7 @@ export function CombineHeatMapData(codeChefData, codeForcesData, leetCodeData) {
 
 
 export function ConvertCFData(result) {
+    if(!result || result.length === 0) return null;
     const dataMap = {};
     const solvedMap = {};
     let count = 0;
@@ -40,6 +41,7 @@ export function ConvertCFData(result) {
 
 
 export function ConvertLCData(submissionCalendar){
+    if(!submissionCalendar) return null;
     const heatMap = Object.entries(submissionCalendar).map(([timestamp, value]) => {
         const date = new Date(parseInt(timestamp, 10) * 1000)
             .toISOString()

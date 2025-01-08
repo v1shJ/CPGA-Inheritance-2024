@@ -1,7 +1,7 @@
 import axios from "axios";
 const backendURL = process.env.REACT_APP_BACKEND_URL;
 
-export function getApiUrl(key, platformID) {
+ function getApiUrl(key, platformID) {
   if(key === "CCData") return `https://codechef-api.vercel.app/handle/${platformID}`;
   else if(key === "CFData") return `https://codeforces.com/api/user.rating?handle=${platformID}`;
   else if(key === "CFData2") return `https://codeforces.com/api/user.status?handle=${platformID}&from=1`;
@@ -24,22 +24,21 @@ export function FetchData(key, token, id) {
           else if(key === "CFData" || key === "CFData2" || key === "CFUserInfo") platform = "Codeforces";
           else if(key === "LCData" || key === "LCContestData") platform = "LeetCode";
 
-          console.log(response.data);
            const platformID =response.data.platformIds[0][platform];
 
           if (platformID) {
-            console.log(platformID); 
-            const ccResponse = await axios.get(
+            console.log(`${platform}` + " ID: " + platformID); 
+            const DataResponse = await axios.get(
               getApiUrl(key, platformID)
             );
-            console.log(ccResponse.data);
-            return ccResponse.data;
+            return DataResponse.data;
           } else {
             console.log(`Platform ID for ${platform} not found`);
             return;
           }
         } catch (err) {
           console.log(err.message);
+          return err.message
         }
       };
 

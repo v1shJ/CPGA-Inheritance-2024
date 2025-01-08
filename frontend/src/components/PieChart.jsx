@@ -36,26 +36,31 @@ const CPStatsPieChart = ({ Count, Title }) => {
   };
 
   return (
-    <div className="flex flex-col gap-1 items-center justify-center"> 
-      {/* Centered Total Value */}
-      <div className="text-2xl text-white text-center">
-         {Title}
-      </div>
-      {/* Pie Chart */}
-      <Pie data={data} options={options} />
-      <div className="flex items-center justify-center">
-        <div className="flex flex-col gap-1 items-start justify-center">
-          <p style={{ color: "#0CB5B4", margin: 0 }}>
-            Codechef: {Count.CodeChef}
-          </p>
-          <p style={{ color: "#A7E435", margin: 0 }}>
-            Codeforces: {Count.CodeForces}
-          </p>
-          <p style={{ color: "#2BB845", margin: 0 }}>
-            LeetCode: {Count.LeetCode}
-          </p>
+    <div className="flex flex-col w-full gap-1 items-center justify-center">
+      <div className="text-2xl text-white text-center">{Title}</div>
+      {Count.CodeChef || Count.CodeForces || Count.LeetCode ? (
+        <div className="flex flex-col w-full gap-1 items-center justify-center">
+          <div className="w-full ">
+          <Pie data={data} options={options} />
+          </div>
+
+          <div className="flex items-center justify-center">
+            <div className="flex flex-col gap-1 items-start justify-center">
+              <p style={{ color: "#0CB5B4", margin: 0 }}>
+                Codechef: {Count.CodeChef}
+              </p>
+              <p style={{ color: "#A7E435", margin: 0 }}>
+                Codeforces: {Count.CodeForces}
+              </p>
+              <p style={{ color: "#2BB845", margin: 0 }}>
+                LeetCode: {Count.LeetCode}
+              </p>
+            </div>
+          </div>
         </div>
-      </div>
+      ) : (
+        <div className="text-lg text-red-400 mb-4">Data not available</div>
+      )}
     </div>
   );
 };

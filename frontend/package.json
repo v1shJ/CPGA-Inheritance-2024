@@ -25,6 +25,7 @@
     "react-npm": "^2.6.1",
     "react-router-dom": "^7.0.2",
     "react-scripts": "5.0.1",
+    "react-toastify": "^11.0.2",
     "react-tooltip": "^5.28.0",
     "tailwind": "^4.0.0",
     "tailwind-scrollbar-hide": "^2.0.0",

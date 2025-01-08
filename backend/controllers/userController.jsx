@@ -33,7 +33,7 @@ const registerUser = async (req, res) => {
         name,
         email,
         username,
-        password: hash
+        password: hash,
       });
 
       try {
@@ -46,8 +46,12 @@ const registerUser = async (req, res) => {
           token: token,
           user: {
             id: user._id,
-            email: user.email
-          }
+            name: user.name,
+            username: user.username,
+            email: user.email,
+            image: user.image,
+            platformIds: user.platformIds,
+          },
         });
       } catch (err) {
         res.status(400).json({ status: "failed", message: err.message });
@@ -91,7 +95,7 @@ const loginUser = async (req, res) => {
         username: user.username,
         email: user.email,
         image: user.image,
-        platformIds: user.platformIds
+        platformIds: user.platformIds,
       },
     });
   });
@@ -99,5 +103,5 @@ const loginUser = async (req, res) => {
 
 module.exports = {
   registerUser,
-  loginUser
+  loginUser,
 };

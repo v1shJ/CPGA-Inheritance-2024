@@ -12,9 +12,6 @@ export function Loader() {
       <div className="shadow"></div>
       <div className="shadow"></div>
     </div>
-    <div>
-      <h1 className="text-cyan-400 text-xl">Loading...</h1>
-    </div>
     </div>
   );
 }
