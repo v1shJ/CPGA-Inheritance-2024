@@ -21,15 +21,63 @@ const userSchema = new mongoose.Schema({
   },
   password: {
     type: String,
-    required: true
+    required: true,
   },
   platformIds: {
     type: Array,
-    default: []
+    default: [],
   },
   emailVerified: {
     type: Boolean,
     default: false,
+  },
+  problemTags: {
+    type: Array,
+    default: [],
+  },
+  ratingRange: {
+    min: {
+      type: Number,
+    },
+    max: {
+      type: Number,
+    },
+  },
+  dailyProblems: {
+    type: [
+      {
+        status: {
+          type: String,
+          enum: ["pending", "solved"],
+          default: "pending",
+        },
+        name: {
+          type: String,
+          required: true,
+        },
+        date: {
+          type: Date,
+          default: Date.now,
+        },
+        tags: {
+          type: Array,
+          default: [],
+        },
+        rating: {
+          type: Number,
+          required: true,
+        },
+        link: {
+          type: String,
+          required: true,
+        },
+        points : {
+          type: Number,
+          default: 0,
+        },
+      },
+    ],
+    default: [],
   },
   dailyPoints: {
     type: Number,

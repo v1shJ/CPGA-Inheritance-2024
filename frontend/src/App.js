@@ -13,8 +13,8 @@ import Idform from "./components/Idform.jsx";
 import VerifyEmail from "./components/verifyEmail.jsx";
 import Leaderboard from "./components/Leaderboard.jsx";
 import DailyProblems from "./components/DailyProblems.jsx";
-import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import DailyProblemForm from "./components/DailyProblemForm.jsx";
 
 function checkLogin() {
   const token = localStorage.getItem("token");
@@ -66,6 +66,10 @@ function App() {
     {
       path: "/dailyproblems",
       element: checkLogin() ? <DailyProblems /> : <Login />,
+    },
+    {
+      path: "/daily-problem-form",
+      element: checkLogin() ? <DailyProblemForm /> : <Login />,
     }
   ]);
 

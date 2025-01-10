@@ -35,10 +35,10 @@ function useFetchWithLocalStorage(
   }
 
   const fetchData = useCallback(
-    async (specialRefresh) => {
+    async (specialRefresh, hour= 0.25) => {
       try {
         let hours = 3; // Default to 3 hours
-        if (specialRefresh) hours = 0.25;
+        if (specialRefresh) hours = hour;
         let timeToFetch = shouldFetchData(key, hours);
 
         // For special refresh, handle time check first

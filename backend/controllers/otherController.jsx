@@ -43,7 +43,7 @@ const transporter = require("../config/transporter");
 
 // Send verification email
 const sendVerificationEmail = async (req, res) => {
-  console.log(req.body);
+  // console.log(req.body);
   const {email, id } = req.body;
 
   try {
@@ -72,12 +72,7 @@ const verifyEmail = async (req, res) => {
   }
 
   try {
-    // Verify the token using the secret key
-    const decoded = jwt.verify(token, secretkey);
-    // console.log(decoded);
-    // const { userId } = decoded;
-    const userId = decoded.userId;
-    // console.log(userId);
+    const userId = req.user.userID;
 
     // Find the user by ID
     const user = await UserModel.findById(userId);
@@ -105,7 +100,7 @@ const verifyEmail = async (req, res) => {
 
 const getAllUsers = async (req, res) => {
   const users = await UserModel.find();
-  console.log(users);
+  // console.log(users);
   res.json(users);
 }
 
@@ -158,11 +153,95 @@ const ccProblemCount = async (req, res) => {
   }
 };
 
+const addDailyProblemPreferences = async (req, res) => {
+  // console.log(req.body);
+  const userId = req.user.userID;
+  const { problemTags, ratingRange } = req.body;
+
+  try {
+    const user = await UserModel.findById(userId);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    user.problemTags = problemTags;
+    user.ratingRange = ratingRange;
+    await user.save();
+
+    res.json({ message: "Daily problem preferences saved successfully" });
+  }
+  catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+}
+
+const getALLDailyProblems = async (req, res) => {
+  const userId = req.user.userID;
+  const user = await UserModel.findById(userId);
+  if (!user) {
+    return res.status(404).json({ message: "User not found" });
+  }
+  // console.log(user.dailyProblems);
+  res.json(user.dailyProblems);
+}
+
+const saveDailyProblem = async (req, res) => {
+  // console.log(req.body);
+  const userId = req.user.userID;
+  const dailyProblem = req.body;
+  const user = await UserModel.findById(userId);
+  if (!user) {
+    return res.status(404).json({ message: "User not found" });
+  }
+
+  const dailyproblem = {
+    name: dailyProblem.name,
+    rating: dailyProblem.rating,
+    tags: dailyProblem.tags,
+    link:`https://codeforces.com/contest/${dailyProblem.contestId}/problem/${dailyProblem.index}`,
+    points : dailyProblem.points!==0 ? dailyProblem.points: 500,
+  }
+  // console.log(dailyproblem);
+  user.dailyProblems.push(dailyproblem);
+  await user.save();
+  res.json({ message: "Daily problem saved successfully" });
+}
+
+const updateProblemStatus = async (req, res) => {
+  const userId = req.user.userID;
+  const { contestId, index, points} = req.body;
+  console.log(req.body);
+
+  const user = await UserModel.findById(userId);
+  if (!user) {
+    return res.status(404).json({ message: "User not found" });
+  }
+
+  const Link = `https://codeforces.com/contest/${contestId}/problem/${index}`;
+  const problem = user.dailyProblems.find(
+    (problem) => problem.link === Link
+  );
+  console.log(problem);
+  if (!problem) {
+    return res.status(404).json({ message: "Problem not found" });
+  }
+  problem.status = "solved";
+  user.dailyPoints += points;
+  await user.save();
+  console.log(user);
+  res.json({ message: "Problem status updated successfully" });
+}
+
 module.exports = {
   addPlatforms,
   getProfile,
   sendVerificationEmail,
   verifyEmail,
   getAllUsers,
-  ccProblemCount
+  ccProblemCount,
+  addDailyProblemPreferences,
+  getALLDailyProblems,
+  saveDailyProblem,
+  updateProblemStatus
 };

@@ -63,3 +63,81 @@ export async function fetchCodeChefData(key ,token, id) {
     console.log(err.message);
   }
 };
+
+
+export async function getDailyProblem() {
+  const dailyProblemPreference = JSON.parse(localStorage.getItem("dailyProblemPreference") || "{}");
+  const problemTags = dailyProblemPreference.problemTags || ["implementation"];
+  const ratingRange = dailyProblemPreference.ratingRange || {min:800, max:1200};
+
+  try {
+    const allProblems = [];
+
+    for (const tag of problemTags) {
+      const response = await axios.get(`https://codeforces.com/api/problemset.problems?tags=${tag}`);
+      allProblems.push(...response.data.result.problems);
+    }
+
+    const problemMap = new Map();
+    allProblems.forEach(problem => {
+      const key = `${problem.contestId}-${problem.index}`;
+      if (!problemMap.has(key)) {
+      problemMap.set(key, problem);
+      }
+    });
+
+    const uniqueProblems = Array.from(problemMap.values());
+    // console.log(uniqueProblems)
+    const requiredProblems = uniqueProblems.filter((problem) => {
+      return problem.rating >= ratingRange.min && problem.rating <= ratingRange.max;
+    });
+    // console.log(requiredProblems); 
+    const randomProblem = requiredProblems[Math.floor(Math.random() * requiredProblems.length)];
+    // console.log(randomProblem);
+    localStorage.setItem("dailyProblem", JSON.stringify(randomProblem));
+    try {
+      await axios.post(`${backendURL}/api/save-daily-problem`, randomProblem, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
+      console.log("Daily problem saved successfully");
+    } catch (err) {
+      console.log("Error saving daily problem:", err.message);
+    }
+    return randomProblem;
+  } catch (err) {
+    console.log(err.message);
+  }
+}
+
+
+export async function getALLDailyProblems() {
+  try {
+    const response = await axios.get(`${backendURL}/api/get-all-daily-problems`,{
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+    });
+    response.data.sort((a, b) => new Date(b.date) - new Date(a.date));
+    return response.data;
+  } catch (err) {
+    console.log(err.message);
+    return err;
+  }
+}
+
+export async function updateProblemStatus({contestId, index, points}) {
+  try {
+    const response = await axios.post(`${backendURL}/api/update-problem-status`, {contestId, index, points}, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+    });
+    return response;
+  }
+  catch (err) {
+    console.log(err.message);
+    return
+  }
+}
