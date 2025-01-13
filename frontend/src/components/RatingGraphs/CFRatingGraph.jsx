@@ -1,103 +1,101 @@
 import React from "react";
-import { Line } from "react-chartjs-2";
 import {
-  Chart as ChartJS,
-  LineElement,
-  PointElement,
-  CategoryScale,
-  LinearScale,
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  CartesianGrid,
   Tooltip,
   Legend,
-} from "chart.js";
+  ResponsiveContainer,
+} from "recharts";
 
-ChartJS.register(
-  LineElement,
-  PointElement,
-  CategoryScale,
-  LinearScale,
-  Tooltip,
-  Legend
-);
-
-const RatingGraph = ({ ratingData }) => {
-  if (!ratingData) {
-    return <h1 className="text-red-400">No contest participation data available</h1>;
+const CodeforcesRatingGraph = ({ ratingData, isLoading = false }) => {
+  if (isLoading) {
+    return <p>Loading rating data...</p>;
   }
 
-  const labels = ratingData.map((item) => {
-    const month = new Date(item.ratingUpdateTimeSeconds * 1000);
-    return month.toLocaleString("en-In", {
-      month: "short",
-      timeZone: "Asia/Kolkata",
-    });
-  });
+  if (!ratingData || ratingData.length === 0) {
+    return <p>No contest participation data available</p>;
+  }
 
-  const ratings = ratingData.map((item) => item.newRating);
-  const contestNames = ratingData.map((item) => item.contestName);
-  const ratingChanges = ratingData.map(
-    (item) => item.newRating - item.oldRating
-  );
-
-  const chartData = {
-    labels,
-    datasets: [
+  const formattedData = ratingData.map((entry) => ({
+    ...entry,
+    date: new Date(entry.ratingUpdateTimeSeconds * 1000).toLocaleString(
+      "en-IN",
       {
-        label: "CF Rating Graph",
-        data: ratings,
-        borderColor: "rgba(75, 192, 192, 1)",
-        backgroundColor: "rgba(75, 192, 192, 0.2)",
-      },
-    ],
-  };
+        month: "short",
+        year: "numeric",
+        timeZone: "Asia/Kolkata",
+      }
+    ),
+    ratingChange: entry.newRating - entry.oldRating,
+  }));
 
-  const options = {
-    responsive: true,
-    plugins: {
-      legend: {
-        position: "top",
-      },
-      tooltip: {
-        callbacks: {
-            label: function (context) {
-                const contestName = contestNames[context.dataIndex];
-                let ratingChange = ratingChanges[context.dataIndex];
-                if (ratingChange > 0) {
-                  ratingChange = `+${ratingChange}`;
-                }
-                const date = new Date(ratingData[context.dataIndex].ratingUpdateTimeSeconds * 1000);
-                const rank = ratingData[context.dataIndex].rank;
-                
-                // Returning each element on a new line
-                return [
-                  `Rating: ${context.raw} (${ratingChange})`,
-                  `Rank: ${rank}`,
-                  `Contest: ${contestName}`,
-                  `Date: ${date.toLocaleString("en-In", {   timeZone: "Asia/Kolkata" })}`,
-                ];
-              },
-        },
-      },
-    },
-    scales: {
-      x: {
-        title: {
-          display: true,
-          text: "Contests",
-        },
-        title: {
-          display: true,
-          text: "Rating",
-        },
-      },
-    },
+  const CustomTooltip = ({ active, payload }) => {
+    if (active && payload && payload.length) {
+      const data = payload[0].payload;
+      return (
+        <div
+          className="bg-gray-600 p-4 border text-white rounded shadow-md"
+        >
+          <p>
+            <strong>Contest:</strong> {data.contestName}
+          </p>
+          <p>
+            <strong>Rating:</strong> {data.newRating} (
+            {data.ratingChange > 0
+              ? `+${data.ratingChange}`
+              : data.ratingChange}
+            )
+          </p>
+          <p>
+            <strong>Rank:</strong> {data.rank}
+          </p>
+          <p>
+            <strong>Date:</strong> {data.date}
+          </p>
+        </div>
+      );
+    }
+    return null;
   };
 
   return (
-    // <div style={{ width: '80%', margin: '0 auto' }}>
-    //   <h2>User Rating Progress</h2>
-    <Line data={chartData} options={options} />
-    // </div>
+    <div className="w-full max-w-3xl rounded-lg shadow-sm">
+      <h2 className="text-xl text-center font-semibold text-cyan-600 mb-1">Codeforces Rating Progress</h2>
+      <div className="h-72">
+      <ResponsiveContainer width="100%" height="100%">
+        <LineChart
+          data={formattedData}
+          margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
+          >
+          <CartesianGrid stroke="#000000" strokeDasharray="3 3" />
+          <XAxis
+            dataKey="date"
+            label={{
+              value: "Contests",
+              position: "insideBottomRight",
+              offset: -10,
+            }}
+            />
+          <YAxis
+            label={{ value: "Rating", angle: -90, position: "insideLeft" }}
+            />
+          <Tooltip content={<CustomTooltip />} />
+          <Legend/>
+          <Line
+            type="monotone"
+            dataKey="newRating"
+            stroke="#555555"
+            dot={{ r: 3 }}
+            activeDot={{ r: 8 }}
+            />
+        </LineChart>
+      </ResponsiveContainer>
+            </div>
+    </div>
   );
 };
 
-export default RatingGraph;
+export default CodeforcesRatingGraph;

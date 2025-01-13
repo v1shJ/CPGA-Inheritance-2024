@@ -3,6 +3,8 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 import { ToastContainer } from "react-toastify";
 import { showSuccessToast, showErrorToast } from "./toastify";
+import { User, Mail, Lock, Camera, ArrowLeft, Home } from "lucide-react";
+
 const Login = () => {
   const BackendUrl = process.env.REACT_APP_BACKEND_URL;
 
@@ -42,73 +44,89 @@ const Login = () => {
   };
 
   return (
-    <div className="flex items-center justify-center h-screen">
-      <div>
-        {error && (
-          <>
-            {showErrorToast(error)}
-            {setError("")}
-          </>
-        )}
-      </div>
-      <div className="p-4 flex flex-col gap-4 items-center shadow-2xl w-full h-full bg-gradient-to-b from-black to-gray-800 justify-center">
-        <form className="flex flex-col items-center bg-gradient-to-b to-black from-gray-800 gap-4 p-4 border rounded-2xl w-4/5 md:w-3/5">
-          <p className="text-center text-[#64ffda] text-4xl">Login</p>
+    <div className="min-h-screen w-full bg-gradient-to-b from-gray-900 to-black flex items-center justify-center p-4">
+    <div className="w-full max-w-md">
+      {error && (
+        <>
+          {showErrorToast(error)}
+          {setError("")}
+        </>
+      )}
+      
+      <div className="backdrop-blur-lg bg-gray-900/50 p-8 rounded-2xl border border-gray-800 shadow-2xl">
+        <div className="mb-8 text-center">
+          <h1 className="text-4xl font-bold bg-gradient-to-r from-[#64ffda] to-cyan-300 bg-clip-text text-transparent">
+            Welcome Back
+          </h1>
+          <p className="text-gray-400 mt-2">Please sign in to continue</p>
+        </div>
 
-          <div className="flex items-center border justify-center gap-2 p-4 bg-[#1b1b1b] rounded-xl shadow-inner w-full max-w-md">
-            <i className="fas fa-user text-[#64ffda]"></i>
-            <input
-              required
-              placeholder="Username or Email"
-              className="bg-transparent border-none outline-none w-full text-[#ccd6f6] pl-4"
-              type="text"
-              name="emailOrUsername"
-              onChange={handleChange}
-            />
-          </div>
-          <div className="flex items-center border justify-center gap-2 p-4 bg-[#1b1b1b] rounded-xl shadow-inner w-full max-w-md">
-            <i className="fas fa-lock text-[#64ffda]"></i>
-            <input
-              placeholder="Password"
-              className="bg-transparent border-none outline-none w-full text-[#ccd6f6] pl-4"
-              type="password"
-              name="password"
-              onChange={handleChange}
-            />
-          </div>
-          <div className="flex items-center justify-evenly w-full max-w-md">
-            <button
-              onClick={handleSubmit}
-              className="cursor-pointer py-3 px-6 rounded-xl border border-[#64ffda] text-[#64ffda] font-bold transition-all duration-300 hover:bg-[#64ffda] hover:text-black hover:shadow-inner"
-            >
-              Login
-            </button>
-            <div className="flex flex-col">
-              <p className="text-white">Don't have an account?</p>
-              <Link
-                to="/register"
-                className="text-[#64ffda] hover:text-neutral-200"
-              >
-                Register
-              </Link>
+        <form onSubmit={handleSubmit} className="space-y-6">
+          <div className="space-y-4">
+            <div className="relative">
+              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                <User className="h-5 w-5 text-[#64ffda]" />
+              </div>
+              <input
+                required
+                placeholder="Username or Email"
+                className="w-full pl-10 pr-4 py-3 bg-gray-800/50 border border-gray-700 focus:border-[#64ffda] rounded-xl outline-none text-gray-100 transition-all duration-200"
+                type="text"
+                name="emailOrUsername"
+                onChange={handleChange}
+              />
+            </div>
+
+            <div className="relative">
+              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                <Lock className="h-5 w-5 text-[#64ffda]" />
+              </div>
+              <input
+                required
+                placeholder="Password"
+                className="w-full pl-10 pr-4 py-3 bg-gray-800/50 border border-gray-700 focus:border-[#64ffda] rounded-xl outline-none text-gray-100 transition-all duration-200"
+                type="password"
+                name="password"
+                onChange={handleChange}
+              />
             </div>
           </div>
-          <Link to="/" className="text-zinc-500">
-            Forgot Password
-          </Link>
+
+          <div className="flex flex-col gap-4">
+            <button
+              type="submit"
+              className="w-full py-3 px-6 rounded-xl bg-gradient-to-r from-[#64ffda] to-cyan-400 text-gray-900 font-semibold hover:opacity-90 transition-all duration-200 transform hover:scale-[1.02]"
+            >
+              Sign In
+            </button>
+
+            <div className="flex items-center justify-between text-sm">
+              <Link to="/forgot-password" className="text-gray-400 hover:text-[#64ffda] transition-colors">
+                Forgot Password?
+              </Link>
+              <div className="flex items-center gap-1">
+                <span className="text-gray-400">New here?</span>
+                <Link to="/register" className="text-[#64ffda] hover:text-cyan-300 font-medium">
+                  Create Account
+                </Link>
+              </div>
+            </div>
+          </div>
         </form>
-        <Link to="/" className="custom-btn mt-4">
-          Home
+      </div>
+
+      <div className="mt-6 flex justify-center">
+        <Link
+          to="/"
+          className="flex items-center gap-2 text-gray-400 hover:text-[#64ffda] transition-colors"
+        >
+          <Home className="w-4 h-4" />
+          <span>Back to Home</span>
         </Link>
       </div>
-      <ToastContainer
-                position="top-right"
-                autoClose={3000}
-                hideProgressBar={false}
-                closeOnClick
-                pauseOnHover
-            />
     </div>
+    <ToastContainer position="top-right" autoClose={3000} />
+  </div>
   );
 };
 

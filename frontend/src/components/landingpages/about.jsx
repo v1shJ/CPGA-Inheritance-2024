@@ -1,162 +1,149 @@
-import React, { useEffect, useState } from "react";
-import "./about.css";
+import React, {useState } from "react";
+import { motion } from "framer-motion";
 import videoSrc from "../../assets/WebsiteVideo.mp4";
+import placeholder from "../../assets/placeholder.png";
 
-const images = [
-  [
-    "https://images.unsplash.com/photo-1531398574919-7ebcf655bb4c?q=80&w=5070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Velit officiis, architecto aut sequi laborum et laudantium eveniet.",
-  ],
-  [
-    "https://images.unsplash.com/photo-1531959870249-9f9b729efcf4?q=80&w=4854&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    "Velit officiis, architecto aut sequi laborum et laudantium eveniet. Quisquam, minus, odio unde a incidunt sequi voluptas reiciendis earum eligendi natus omnis.",
-  ],
-  [
-    "https://images.unsplash.com/photo-1564731071754-001b53a902fb?q=80&w=3870&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Velit officiis Quisquam, minus, odio unde a incidunt sequi voluptas reiciendis earum eligendi natus omnis.",
-  ],
-  [
-    "https://images.unsplash.com/photo-1475372674317-8003c861cb6a?q=80&w=3774&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    "Lorem Quisquam, minus, odio unde a incidunt sequi voluptas reiciendis earum eligendi natus omnis.",
-  ],
-  [
-    "https://images.unsplash.com/photo-1628626969172-74f95362400f?q=80&w=3771&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    "dolor sit amet consectetur Quisquam, minus, odio unde a incidunt sequi voluptas reiciendis earum eligendi natus omnis.",
-  ],
-];
+const FeatureCard = ({ image, description, index }) => (
+  <motion.div
+    initial={{ opacity: 0, y: 20 }}
+    whileInView={{ opacity: 1, y: 0 }}
+    transition={{ duration: 0.5, delay: index * 0.1 }}
+    className="w-full max-w-2xl mx-auto"
+  >
+    <div className="relative group rounded-2xl overflow-hidden border border-gray-800 bg-gradient-to-b from-gray-900 to-gray-800 p-6 transition-all duration-300 hover:border-cyan-900/50 hover:shadow-lg hover:shadow-cyan-900/20">
+      <div className="absolute inset-0 bg-gradient-to-b from-cyan-900/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+      
+      <div className="flex flex-col md:flex-row gap-6 items-center relative z-2">
+        <div className="w-full md:w-1/2 overflow-hidden rounded-xl">
+          <img
+            src={placeholder}
+            alt="Feature"
+            className="w-full h-64 object-cover transform transition-transform duration-300 group-hover:scale-105"
+          />
+        </div>
+        
+        <div className="w-full md:w-1/2 space-y-4">
+          <h3 className="text-xl font-semibold bg-gradient-to-r from-cyan-400 to-[#64ffda] bg-clip-text text-transparent">
+            Feature {index + 1}
+          </h3>
+          <p className="text-gray-300 leading-relaxed">
+            {description}
+          </p>
+        </div>
+      </div>
+    </div>
+  </motion.div>
+);
+
+const VideoSection = ({ videoSrc }) => {
+  const [isInView, setIsInView] = useState(false);
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, scale: 0.8, rotateX: 40 }}
+      animate={{ 
+        opacity: isInView ? 1 : 0,
+        scale: isInView ? 1 : 0.8,
+        rotateX: isInView ? 0 : 40
+      }}
+      transition={{ duration: 0.8, ease: "easeOut" }}
+      className="sticky top-24 w-full max-w-3xl mx-auto"
+      onViewportEnter={() => setIsInView(true)}
+      onViewportLeave={() => setIsInView(false)}
+    >
+      <div className="relative rounded-2xl overflow-hidden shadow-2xl">
+        <div className="absolute inset-0 bg-gradient-to-t from-cyan-900/20 to-transparent"></div>
+        <video
+          src={videoSrc}
+          className="w-full h-auto rounded-2xl"
+          autoPlay
+          muted
+          loop
+          playsInline
+        />
+      </div>
+    </motion.div>
+  );
+};
+
+const ScrollProgress = ({ progress }) => (
+  <div className="fixed left-4 top-1/2 transform -translate-y-1/2 h-48 w-1">
+    <div className="h-full w-full bg-gray-800/30 rounded-full">
+      <div
+        className="w-full bg-gradient-to-b from-cyan-400 to-[#64ffda] rounded-full transition-all duration-200"
+        style={{ height: `${progress * 100}%` }}
+      />
+    </div>
+  </div>
+);
 
 const About = () => {
   const [scrollProgress, setScrollProgress] = useState(0);
-
-  const handleScroll = () => {
-    const aboutSection = document.getElementById("about");
-    const totalScroll = aboutSection.scrollTop;
-    const sectionHeight = aboutSection.scrollHeight - aboutSection.clientHeight;
-    const scroll = totalScroll / sectionHeight;
-
-    setScrollProgress(scroll);
+  
+  const handleScroll = (e) => {
+    const element = e.target;
+    const scrolled = element.scrollTop;
+    const height = element.scrollHeight - element.clientHeight;
+    setScrollProgress(scrolled / height);
   };
 
-  useEffect(() => {
-    const aboutSection = document.getElementById("about");
-    aboutSection.addEventListener("scroll", handleScroll);
-
-    return () => {
-      aboutSection.removeEventListener("scroll", handleScroll);
-    };
-  }, []);
-
-  const [transformStyle, setTransformStyle] = useState(
-    "perspective(1200px) scaleX(0.5) scaleY(0.8) rotateX(40deg)"
-  );
-
-  useEffect(() => {
-    const handleScroll = () => {
-      const section = document.querySelector("#landing-image");
-      if (section) {
-        const rect = section.getBoundingClientRect();
-        const windowHeight = window.innerHeight;
-
-        if (rect.top < windowHeight && rect.bottom > 0) {
-          const progress = Math.max(
-            0,
-            Math.min(1, 1 - (rect.top-200) / windowHeight)
-          );
-
-          const perspective = 1200;
-          const translateY = 20 * (1 - progress);
-          const scaleX = 0.8 + 0.2 * progress;
-          const scaleY = 0.8 + 0.2 * progress;
-          const rotateX = 40 * (1 - progress);
-
-          setTransformStyle(
-            `perspective(${perspective}px) translateY(${translateY}px) scaleX(${scaleX}) scaleY(${scaleY}) rotateX(${rotateX}deg)`
-          );
-        } else if (rect.top > windowHeight) {
-          setTransformStyle(
-            "perspective(1200px) scaleX(0.8) scaleY(0.8) rotateX(40deg)"
-          );
-        } else if (rect.bottom < 0) {
-          setTransformStyle(
-            "perspective(1200px) scaleX(1) scaleY(1) rotateX(0deg)"
-          );
-        }
-      }
-    };
-
-    window.addEventListener("scroll", handleScroll);
-
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
-  }, []);
+  const features = [
+    {
+      image: {placeholder},
+      description: "Master algorithmic problem-solving with our comprehensive learning paths and structured curriculum."
+    },
+    {
+      image: {placeholder},
+      description: "Practice with carefully curated problems that progressively build your competitive programming skills."
+    },
+    {
+      image: {placeholder},
+      description: "Get instant feedback and detailed explanations to understand complex algorithms and data structures."
+    },
+    {
+      image: {placeholder},
+      description: "Join a community of passionate programmers and learn from peer discussions and expert insights."
+    },
+    {
+      image: {placeholder},
+      description: "Track your progress with detailed analytics and performance metrics to identify areas for improvement."
+    }
+  ];
 
   return (
-    <div className="bg-gradient-to-b from-gray-800 to-black">
-      <div className="title w-full items-center text-center font-light text-5xl">
-        <span>FEATURES</span>
-      </div>
-      <div className="bg-gradient-to-b flex justify-evenl items-center">
-        <div className="w-full lg:w-5/12">
-          <div className=" h-screen flex items-center p-6 md:p-16 w-full">
-            <div
-              id="about"
-              className="rounded-lg flex flex-col justify-evenly items-center scrollbar-hide overflow-y-scroll h-full p-4 w-full border"
-            >
-              {images.map((src, index) => (
-                <div
-                  className="aboutdiv flex w-full items-center justify-center"
-                  key={index}
-                >
-                  <div
-                    className={
-                      "border w-full rounded-3xl md:m-12 p-4 shadow-2xl bg-gradient-to-b from-gray-950 to-gray-800 flex flex-col justify-evenly items-center"
-                    }
-                    id={index + 1}
-                  >
-                    <img
-                      src={src[0]}
-                      className="rounded-3xl objchild"
-                      style={{ width: "250px", height: "250px" }}
-                      alt={`Image ${index + 1}`}
-                    />
-                    <div className="AboutText flex w-4/5 h-60 text-center items-center">
-                      <span> {src[1]}</span>
-                    </div>
-                  </div>{" "}
-                </div>
-              ))}
-            </div>
-            <div className=" h-full w-1">
-              <div className=" w-full h-full bg-gray-800">
-                <div
-                  className="bg-gradient-to-b from-cyan-900 to-cyan-100 w-full"
-                  style={{ height: `${scrollProgress * 100}%` }}
-                ></div>
-              </div>
-            </div>
-          </div>
+    <div id="about" className="min-h-96 bg-gradient-to-b from-gray-900 to-black">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        <div className="text-center mb-16">
+          <h2 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-cyan-400 to-[#64ffda] bg-clip-text text-transparent">
+            Why Choose Us
+          </h2>
+          <p className="mt-4 text-gray-400 max-w-2xl mx-auto">
+            Discover how our platform can help you excel in competitive programming
+          </p>
         </div>
-        <div className="w-6/12 hidden lg:flex items-center">
-          <div
-            id="landing-image"
-            className="hidden lg:flex w-full justify-center rounded-md bg-background "
-            style={{
-              transformStyle: "preserve-3d",
-              transformOrigin: "center top",
-              transform: transformStyle,
-            }}
+
+        <div className="grid lg:grid-cols-2 gap-8 items-start">
+          <div 
+            className="space-y-8 overflow-y-auto max-h-80 pr-4 scrollbar-hide"
+            onScroll={handleScroll}
           >
-            <video
-              src={videoSrc}
-              className="rounded-md w-full shadow-md duration-500 animate-in fade-in h-auto hover:shadow-lg"
-              autoPlay
-              muted
-              loop
-            />
+            {features.map((feature, index) => (
+              <FeatureCard
+                key={index}
+                image={feature.image}
+                description={feature.description}
+                index={index}
+              />
+            ))}
+          </div>
+
+          <div className="hidden lg:block">
+            <VideoSection videoSrc={videoSrc} />
           </div>
         </div>
       </div>
+
+      <ScrollProgress progress={scrollProgress} />
     </div>
   );
 };

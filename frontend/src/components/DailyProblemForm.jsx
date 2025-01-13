@@ -7,11 +7,11 @@ import { NavLink } from "react-router-dom";
 const backendUrl = process.env.REACT_APP_BACKEND_URL;
 
 const DailyProblemForm = () => {
-  const [selectedTags, setSelectedTags] = useState([]);
+  const [selectedTags, setSelectedTags] = useState(["array", "math", "implementation"]);
   const [showTagAlert, setShowTagAlert] = useState(false);
   const [ratingRange, setRatingRange] = useState({
     min: 800,
-    max: 2000,
+    max: 1800
   });
 
   const problemTags = [

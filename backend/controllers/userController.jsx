@@ -51,6 +51,9 @@ const registerUser = async (req, res) => {
             email: user.email,
             image: user.image,
             platformIds: user.platformIds,
+            problemTags: user.problemTags,
+            ratingRange: user.ratingRange,
+            dailyPoints: user.dailyPoints,
           },
         });
       } catch (err) {
@@ -96,6 +99,9 @@ const loginUser = async (req, res) => {
         email: user.email,
         image: user.image,
         platformIds: user.platformIds,
+        problemTags: user.problemTags,
+        ratingRange: user.ratingRange,
+        dailyPoints: user.dailyPoints,
       },
     });
   });

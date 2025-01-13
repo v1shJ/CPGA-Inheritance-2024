@@ -10,24 +10,24 @@ const FAQ = () => {
   const faqData = [
     {
       question: "What is CPGA?",
-      answer: "CPGA (Competitive Programming Growth Analyzer) is a platform that helps users analyze their competitive programming progress, receive guidance from an AI bot on problem topics and difficulty levels, and solve daily problems based on their skill level."
+      answer: "CPGA (Competitive Programming Guide and Analyzer) is a platform that helps users analyze their competitive programming progress, receive guidance from an AI bot on problem topics and difficulty levels, and solve daily problems based on their skill level."
     },
     {
       question: "How do I track my CP progress?",
       answer: "You can track your CP progress through graphical analysis provided by the platform. The analysis includes metrics such as solved problems, difficulty levels, and performance over time."
     },
-    {
-      question: "Can I get mentor support on CPGA?",
-      answer: "Yes, CPGA offers mentor support for doubts related to competitive programming. You can ask questions, and mentors will provide guidance to help you improve your skills."
-    },
+    // {
+    //   question: "Can I get mentor support on CPGA?",
+    //   answer: "Yes, CPGA offers mentor support for doubts related to competitive programming. You can ask questions, and mentors will provide guidance to help you improve your skills."
+    // },
     {
       question: "How are the daily problems suggested?",
-      answer: "The platform suggests daily problems based on your skill level and previous performance. This helps you stay motivated and steadily improve in competitive programming."
+      answer: "The platform suggests daily problems of your selected preference and rating range. This helps you stay motivated and steadily improve in competitive programming."
     },
-    {
-      question: "How can I contribute to the CPGA community?",
-      answer: "You can contribute by answering questions, sharing insights, or suggesting improvements on the platform. We encourage active participation from all users to create a collaborative learning environment."
-    }
+    // {
+    //   question: "How can I contribute to the CPGA community?",
+    //   answer: "You can contribute by answering questions, sharing insights, or suggesting improvements on the platform. We encourage active participation from all users to create a collaborative learning environment."
+    // }
   ];
 
 return (

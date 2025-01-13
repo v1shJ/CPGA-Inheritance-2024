@@ -1,33 +1,98 @@
 import React from "react";
+import { NavLink } from "react-router-dom";
+import { ArrowRight, Code, Target, Users } from "lucide-react";
 import Image from "../../assets/LandingPageImage.png";
-import { NavLink } from "react-router-dom"; 
 
 export default function LandingPage() {
+  const features = [
+    {
+      icon: <Code className="w-6 h-6 text-cyan-400" />,
+      title: "Smart Practice",
+      description: "Curated problems matching your skill level"
+    },
+    {
+      icon: <Target className="w-6 h-6 text-cyan-400" />,
+      title: "Daily Challenges",
+      description: "Stay consistent with daily coding exercises"
+    },
+    {
+      icon: <Users className="w-6 h-6 text-cyan-400" />,
+      title: "Community Support",
+      description: "Learn from peers and experienced programmers"
+    }
+  ];
+
   return (
-      <div id="home" className="landingPage h-screen p-2 bg-gradient-to-b from-black to-gray-800">
-        <div className=" rounded-lg h-full flex justify-evenly items-center">
-          <div className=" flex flex-col justify-evenly items-center w-full lg:w-3/5">
-            <div
-              id="title"
-              className="flex flex-col justify-center gap-2 items-center text-center font-light text-5xl"
-            >
-             <span><h2 className="text-cyan-200">"Master Competitive Programming</h2></span> 
-              <span><h2 className="text-cyan-200"> with Ease"</h2></span> 
-              <span className="text-2xl text-cyan-100">Personalized Guidance, Daily Challenges, and Expert Insights – Your Ultimate Companion for CP Success.</span>
+    <div id="home" className="min-h-screen bg-gradient-to-b from-gray-900 to-gray-800 flex items-center">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24">
+        <div className="grid lg:grid-cols-2 gap-12 items-center">
+          {/* Left Column */}
+          <div className="space-y-8">
+            <div className="space-y-4">
+              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold">
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">
+                  Master Competitive Programming
+                </span>
+              </h1>
+              <p className="text-xl sm:text-2xl text-gray-300 font-light">
+                Your Ultimate Companion for CP Success
+              </p>
+              <p className="text-gray-400 text-lg max-w-xl">
+                Personalized guidance, daily challenges, and expert insights to help you excel in competitive programming.
+              </p>
             </div>
-            <NavLink to="/register" className=" custom-btn mt-5 animate__animated animate__pulse animate__infinite">
-              GET STARTED
-            </NavLink>
+
+            <div className="flex flex-col sm:flex-row gap-4">
+              <NavLink
+                to="/register"
+                className="inline-flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-lg text-white bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-600 hover:to-blue-600 transition-all duration-200 shadow-lg hover:shadow-xl"
+              >
+                Get Started Now
+                <ArrowRight className="ml-2 w-5 h-5" />
+              </NavLink>
+              
+              <NavLink
+                to="/learn-more"
+                className="inline-flex items-center justify-center px-6 py-3 border-2 border-cyan-400 text-base font-medium rounded-lg text-cyan-400 hover:bg-cyan-400/10 transition-all duration-200"
+              >
+                Learn More
+              </NavLink>
+            </div>
+
+            {/* Features Grid */}
+            <div className="grid sm:grid-cols-3 gap-6 mt-12">
+              {features.map((feature, index) => (
+                <div
+                  key={index}
+                  className="p-4 rounded-lg bg-gray-800/50 border border-gray-700 hover:border-cyan-400/50 transition-all duration-200"
+                >
+                  <div className="mb-3">{feature.icon}</div>
+                  <h3 className="text-lg font-semibold text-white mb-2">
+                    {feature.title}
+                  </h3>
+                  <p className="text-gray-400 text-sm">
+                    {feature.description}
+                  </p>
+                </div>
+              ))}
+            </div>
           </div>
-          <div className="text-center hidden lg:block">
-            <img
-              src={Image}
-              alt="ANY IMAGE"
-              className="filter rounded-lg brightness-50"
-              style={{ width: "300px", height: "300px" }}
-            />
+
+          {/* Right Column - Hero Image */}
+          <div className="hidden lg:block">
+            <div className="relative">
+              <div className="absolute -inset-0.5 bg-gradient-to-r from-cyan-400 to-blue-500 rounded-lg blur opacity-30"></div>
+              <div className="relative">
+                <img
+                  src={Image}
+                  alt="Competitive Programming"
+                  className="rounded-lg shadow-2xl"
+                />
+              </div>
+            </div>
           </div>
         </div>
       </div>
+    </div>
   );
 }

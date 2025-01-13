@@ -22,21 +22,10 @@ const getProfile = async (req, res) => {
   if(!user) {
     return res.status(404).json({ message: "User not found" });
   }
-  const User = {
-    id: user._id,
-    name: user.name,
-    username: user.username,
-    email: user.email,
-    image: user.image,
-    platformIds: user.platformIds,
-    emailVerified: user.emailVerified,
-    dailyPoints: user.dailyPoints,
-  };
-  if (user) {
+    const { name, email, username, platformIds, emailVerified, problemTags, ratingRange, dailyProblems, dailyPoints } = user;
+    const User = { name, email, username, platformIds, emailVerified, problemTags, ratingRange, dailyProblems, dailyPoints };
+    console.log("user data: "+  User);
     res.json(User);
-  } else {
-    res.status(404).json({ message: "User not found" });
-  }
 };
 
 const transporter = require("../config/transporter");

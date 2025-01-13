@@ -33,14 +33,16 @@ const userSchema = new mongoose.Schema({
   },
   problemTags: {
     type: Array,
-    default: [],
+    default: ["array", "math", "implementation"],
   },
   ratingRange: {
     min: {
       type: Number,
+      default: 800,
     },
     max: {
       type: Number,
+      default: 1800,
     },
   },
   dailyProblems: {

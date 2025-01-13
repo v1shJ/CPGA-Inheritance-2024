@@ -7,6 +7,7 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { showLoaderToast, showSuccessToast, showInfoToast } from "./toastify.jsx";
 import {updateProblemStatus} from "./Api";
+import Countdown from "./timer.jsx";
 
 export default function DailyProblemCard({problem, ind}) {
   const formatDate = (dateString) => {
@@ -41,7 +42,15 @@ export default function DailyProblemCard({problem, ind}) {
           const pathSegments = url.pathname.split('/');
           const contestId = pathSegments[2];
           const index = pathSegments[4];
-          const points = problem.points;
+          let points = 0;
+          const currentDate = new Date();
+          const problemDate = new Date(problem.date);
+          const dailyFetchTime = new Date();
+          dailyFetchTime.setHours(0, 0, 0, 0);
+
+          if (problemDate > dailyFetchTime && problemDate <= currentDate) {
+            points = problem.points;
+          }
 
           if(problemSolved[0].problem.contestId == contestId && problemSolved[0].problem.index === index &&  problemSolved[0]["verdict"] === "OK") {
             problem.status = "solved";
@@ -66,34 +75,80 @@ export default function DailyProblemCard({problem, ind}) {
         toast.error("Failed to refresh data");
       });
     }
+    
+    const isDailyProblem = formatDate(problem.date) === formatDate(Date.now());
+
+    const getDifficultyColor = (rating) => {
+      if (rating < 1200) return 'text-green-400';
+      if (rating < 1800) return 'text-yellow-400';
+      return 'text-red-400';
+    };
 
   return (
     <div
-      className={`w-full xl:w-6/12 ${
-        problem.status === "solved" ? "bg-cyan-800" : "bg-gray-900"
-      } ${formatDate(problem.date) === formatDate(Date.now()) ? "border" : ""} p-4 rounded-lg mt-4 shadow-2xl`}
-    >
-      <div className="flex flex-wrap w-full gap-4 items-center justify-evenly">
-        <div className="flex items-center justify-center sm:justify-start gap-4 w-80 md:w-1/2 ">
-          <button className="fas fa-refresh text-white" onClick={() => handleRefresh()}></button>
-          <div className="flex flex-col items-center sm:items-start justify-center gap-1 text-white">
-            <div className="text-light text-gray-400">{formatDate(problem.date)}</div>
-            <div className="text-bold text-2xl">{problem.name}</div>
-            <div className="flex gap-1">
-              Difficulty: <p>{problem.rating}</p>
+    className={`w-full transition-all duration-300 hover:scale-[1.01] ${
+      problem.status === "solved" 
+        ? "bg-cyan-900/40 border border-cyan-700/50" 
+        : "bg-gray-900/90 border border-gray-700/50"
+    } ${
+      isDailyProblem 
+        ? "ring-2 ring-cyan-400 ring-opacity-50 shadow-lg shadow-cyan-500/20" 
+        : ""
+    } rounded-xl backdrop-blur-sm p-6`}
+  >
+    <div className="flex flex-col md:flex-row w-full gap-6 items-start md:items-center">
+      <div className="flex-grow space-y-4">
+        <div className="flex items-center gap-4">
+          <button 
+            onClick={handleRefresh}
+            className="p-2 hover:bg-gray-700/50 rounded-full transition-colors"
+          >
+            <i className="fas fa-refresh text-gray-400 hover:text-white transition-colors" />
+          </button>
+          <span className="text-sm text-gray-400">{formatDate(problem.date)}</span>
+        </div>
+        
+        <div className="space-y-2">
+          <h3 className="text-2xl font-bold text-white tracking-tight">
+            {problem.name}
+          </h3>
+          
+          <div className="flex flex-wrap gap-4 text-sm">
+            <div className="flex items-center gap-2">
+              <span className="text-gray-400">Difficulty:</span>
+              <span className={getDifficultyColor(problem.rating)}>
+                {problem.rating}
+              </span>
             </div>
-            <div className="flex gap-1">
-              Points: <p>{problem.points}</p>
-            </div>
-
+            
+            {isDailyProblem && (
+              <div className="flex items-center gap-2">
+                <span className="text-gray-400">Points:</span>
+                <span className="text-white">
+                  {problem.points || "500"}
+                </span>
+              </div>
+            )}
           </div>
         </div>
-        <div className="flex items-center justify-center lg:justify-end md:w-1/3">
-          <NavLink to={problem.link} target="_blank" className="custom-btn">
-            Solve Problem
-          </NavLink>
-        </div>
+      </div>
+
+      <div className="flex items-center gap-4 self-stretch md:self-center">
+        <NavLink 
+          to={problem.link} 
+          target="_blank"
+          className="px-6 py-3 bg-cyan-500 hover:bg-cyan-400 text-white font-medium rounded-lg transition-colors"
+        >
+          {problem.status==="pending"? "Solve Problem": "View Problem"}
+        </NavLink>
+        
+        {isDailyProblem && (
+          <div className="flex-shrink-0">
+            <Countdown />
+          </div>
+        )}
       </div>
     </div>
+  </div>
   );
 }

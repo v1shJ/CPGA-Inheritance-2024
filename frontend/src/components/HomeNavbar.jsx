@@ -29,8 +29,8 @@ function classNames(...classes) {
 }
 
 function handleLogout() {
-  localStorage.clear();
   window.location.href = "/";
+  localStorage.clear();
 }
 
 export default function Example() {

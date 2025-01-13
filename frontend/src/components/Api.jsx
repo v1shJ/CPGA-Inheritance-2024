@@ -66,9 +66,9 @@ export async function fetchCodeChefData(key ,token, id) {
 
 
 export async function getDailyProblem() {
-  const dailyProblemPreference = JSON.parse(localStorage.getItem("dailyProblemPreference") || "{}");
-  const problemTags = dailyProblemPreference.problemTags || ["implementation"];
-  const ratingRange = dailyProblemPreference.ratingRange || {min:800, max:1200};
+  const user = JSON.parse(localStorage.getItem("user"));
+  const problemTags = user.problemTags || ["implementation"];
+  const ratingRange = user.ratingRange || { min: 800, max: 1200 };
 
   try {
     const allProblems = [];

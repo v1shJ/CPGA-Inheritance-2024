@@ -1,23 +1,36 @@
-.color-scale-0 {
-  fill: #2b2c2a;
+.react-calendar-heatmap text {
+  font-size: 12px;
+  fill: #9CA3AF;
 }
-.color-scale-1 {
-  fill: #aaea33;
+
+.react-calendar-heatmap .color-empty {
+  fill: #1F2937;
 }
-.color-scale-2 {
-  fill: #539826;
+
+.react-calendar-heatmap .color-scale-1 {
+  fill: #0F766E;
 }
-.color-scale-3 {
-  fill: #298226;
+
+.react-calendar-heatmap .color-scale-2 {
+  fill: #0D9488;
 }
-.color-scale-4 {
-  fill: #045209;
+
+.react-calendar-heatmap .color-scale-3 {
+  fill: #14B8A6;
 }
-.border{
-    stroke: #252323;
-    stroke-width: 0.5;
+
+.react-calendar-heatmap .color-scale-4 {
+  fill: #2DD4BF;
 }
-.react-calendar-heatmap .weekday-label { 
-    color: white; 
+
+.react-calendar-heatmap rect {
+  rx: 2;
+  stroke: rgba(17, 24, 39, 0.4);
+  stroke-width: 1;
+  transition: stroke 0.2s ease;
 }
-.react-tooltip { background-color: rgb(0, 0, 0); color: rgb(26, 162, 153); border-radius: 5px; padding: 5px; } 
+
+.react-calendar-heatmap rect:hover {
+  stroke: #4FD1C5;
+  stroke-width: 2;
+}

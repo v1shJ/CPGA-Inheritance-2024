@@ -1,14 +1,15 @@
+import React, { useState, useEffect } from "react";
+import { NavLink } from "react-router-dom";
+import { Menu } from "lucide-react";
 import {
   Disclosure,
   DisclosureButton,
   DisclosurePanel,
 } from "@headlessui/react";
-import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
-import { NavLink } from "react-router-dom";
 
 const navigation = [
   { name: "Home", to: "home", current: true },
-  { name: "About", to: "about", current: false},
+  { name: "About", to: "about", current: false },
   { name: "FAQs", to: "faqs", current: false },
 ];
 
@@ -19,84 +20,118 @@ const handleScroll = (section) => {
   window.scrollTo({ top: y, behavior: "smooth" });
 };
 
-export default function MyNavbar() {
+export default function Navbar() {
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 20);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
   return (
-   
-    <div className="flex bg-gradient-to-b from-black to-gray-800 justify-center w-full ">
-      <Disclosure
-        as="nav"
-        className="border border-cyan-300 shadow-2xl w-full rounded-xl fixed z-10 mt-2 backdrop-blur-lg md:backdrop-blur-md "
-      >
-        <div className= " w-full flex items-center justify-center">
-          <div className="relative w-4/5 flex h-16 items-center justify-between">
-            {/* Mobile menu button */}
-            <div className="absolute inset-y-0 right-0 flex items-center sm:hidden ">
-              <DisclosureButton className="custom-btn group relative inline-flex items-center justify-center rounded-md">
-                <Bars3Icon
-                  aria-hidden="true"
-                  className="block h-6 w-6 group-data-[open]:hidden"
-                />
-                <XMarkIcon
-                  aria-hidden="true"
-                  className="hidden h-6 w-6 group-data-[open]:block"
-                />
-              </DisclosureButton>
-            </div>
+    <div className="fixed w-full z-50 px-4">
+      <Disclosure as="nav">
+        {({ open }) => (
+          <>
+            <div
+              className={`mx-auto max-w-6xl ${
+                scrolled 
+                  ? 'my-4 bg-gray-900/95 shadow-lg shadow-cyan-900/20 border border-gray-800' 
+                  : 'my-6 bg-transparent'
+              } rounded-2xl backdrop-blur-md transition-all duration-300`}
+            >
+              <div className="px-4 sm:px-6 lg:px-8">
+                <div className="relative flex h-16 items-center justify-between">
+                  {/* Logo */}
+                  <div className="flex items-center">
+                    <NavLink
+                      onClick={() => handleScroll("home")}
+                      className="text-2xl font-bold bg-gradient-to-r from-cyan-400 to-[#64ffda] bg-clip-text text-transparent hover:opacity-80 transition-opacity"
+                    >
+                      CPGA
+                    </NavLink>
+                  </div>
 
-            {/* Logo */}
-            <div className="flex flex-shrink-0 items-center">
-              <NavLink
-                onClick={() => handleScroll("home")}
-               className="text-3xl text-slate-300">CPGA</NavLink>
-            </div>
+                  {/* Desktop Navigation */}
+                  <div className="hidden sm:flex items-center gap-8">
+                    <div className="flex gap-6">
+                      {navigation.map((item) => (
+                        <NavLink
+                          key={item.name}
+                          onClick={() => handleScroll(item.to)}
+                          className={({ isActive }) =>
+                            `relative px-1 py-2 text-sm font-medium transition-colors hover:text-cyan-400
+                            ${isActive ? 'text-cyan-400' : 'text-gray-300'}
+                            after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-full 
+                            after:origin-left after:scale-x-0 after:bg-cyan-400 
+                            after:transition-transform hover:after:scale-x-100`
+                          }
+                        >
+                          {item.name}
+                        </NavLink>
+                      ))}
+                    </div>
 
-            {/* Desktop menu */}
-            <div className="hidden sm:flex sm:space-x-4">
-              {navigation.map((item) => (
-                <NavLink
-                  onClick={() => handleScroll(item.to)}
-                  key={item.name}
-                  aria-current={item.current ? "page" : undefined}
-                  className="text-white hover:bg-gray-800 hover:text-white block rounded-md px-3 py-2 text-base font-medium"
-                >
-                  {item.name}
-                </NavLink>
-              ))}
-            </div>
+                    <div className="flex items-center gap-3">
+                      <NavLink
+                        to="/login"
+                        className="px-4 py-2 text-sm font-medium text-gray-300 hover:text-cyan-400 transition-colors"
+                      >
+                        Login
+                      </NavLink>
+                      <NavLink
+                        to="/register"
+                        className="px-4 py-2 rounded-lg bg-gradient-to-r from-cyan-500 to-[#64ffda] text-gray-900 text-sm font-medium hover:opacity-90 transition-opacity"
+                      >
+                        Sign Up
+                      </NavLink>
+                    </div>
+                  </div>
 
-            {/* Login and Signup Buttons */}
-            <div className="hidden sm:flex gap-4">
-              <NavLink to="/login" className="custom-btn ">
-                Login
-              </NavLink>
-              <NavLink to="/register" className="custom-btn">
-                Signup
-              </NavLink>
-            </div>
-          </div>
-        </div>
+                  {/* Mobile menu button */}
+                  <div className="sm:hidden">
+                    <DisclosureButton className="inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-800 hover:text-white focus:outline-none">
+                      <Menu className={`h-6 w-6 transition-transform duration-200 ${open ? 'rotate-90' : ''}`} />
+                    </DisclosureButton>
+                  </div>
+                </div>
+              </div>
 
-        {/* Mobile menu */}
-        <DisclosurePanel className="sm:hidden w-full flex flex-col items-center">
-          <div className="w-4/5">
-            {navigation.map((item) => (
-              <NavLink
-                onClick={() => handleScroll(item.to)}
-                key={item.name}
-                aria-current={item.current ? "page" : undefined}
-                className="text-white hover:bg-gray-700 hover:text-white block rounded-md px-3 py-2 text-left font-medium"
-              >
-                {item.name}
-              </NavLink>
-            ))}
-            <NavLink to="/login" className="w-full text-left text-gray-300 hover:bg-gray-700 hover:text-white block rounded-md px-3 py-2 text-base font-medium">
-              Login
-            </NavLink>
-            <NavLink to="/register" className="w-full text-left text-gray-300 hover:bg-gray-700 hover:text-white block rounded-md px-3 py-2 text-base font-medium">
-              Signup
-            </NavLink>
-          </div>
-        </DisclosurePanel>
+              {/* Mobile menu */}
+              <DisclosurePanel className="sm:hidden">
+                <div className="space-y-1 px-4 pb-4">
+                  {navigation.map((item) => (
+                    <NavLink
+                      key={item.name}
+                      onClick={() => handleScroll(item.to)}
+                      className="block px-3 py-2 text-base font-medium text-gray-300 hover:bg-gray-800 hover:text-cyan-400 rounded-lg transition-colors"
+                    >
+                      {item.name}
+                    </NavLink>
+                  ))}
+                  <div className="mt-4 space-y-2">
+                    <NavLink
+                      to="/login"
+                      className="block w-full px-3 py-2 text-base font-medium text-gray-300 hover:bg-gray-800 hover:text-cyan-400 rounded-lg transition-colors"
+                    >
+                      Login
+                    </NavLink>
+                    <NavLink
+                      to="/register"
+                      className="block w-full px-3 py-2 text-base font-medium text-center bg-gradient-to-r from-cyan-500 to-[#64ffda] text-gray-900 rounded-lg hover:opacity-90 transition-opacity"
+                    >
+                      Sign Up
+                    </NavLink>
+                  </div>
+                </div>
+              </DisclosurePanel>
+            </div>
+          </>
+        )}
       </Disclosure>
     </div>
   );

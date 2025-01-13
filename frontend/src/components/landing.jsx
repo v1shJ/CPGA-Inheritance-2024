@@ -11,7 +11,7 @@ import FAQ from "./landingpages/FAQ";
 const Landing = () => {
   return (
     <div>
-      <div>
+      <div className="h-16 bg-[#121928]">
         <MyNavbar />
       </div>
       <div>

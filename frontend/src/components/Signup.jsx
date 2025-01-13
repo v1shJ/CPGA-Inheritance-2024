@@ -3,6 +3,8 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 import { showSuccessToast, showErrorToast, showInfoToast, showCustomToast, showPromiseToast } from "./toastify.jsx";
 import { ToastContainer, toast} from 'react-toastify';
+import { User, Mail, Lock, Camera, ArrowLeft, Home } from "lucide-react";
+
 
 const Form = () => {
   const backendUrl = process.env.REACT_APP_BACKEND_URL;
@@ -103,146 +105,151 @@ const Form = () => {
   };
 
   return (
-    <div className="flex justify-center w-full h-full min-h-screen items-center bg-gradient-to-b from-black to-gray-800">
-      <div className="flex flex-col items-center shadow-2xl h-full justify-center w-full">
-        <form
-          onSubmit={handleSubmit}
-          className="flex flex-col mt-4 p-4 items-center justify-center bg-gradient-to-b from-gray-800 to-black gap-4 rounded-2xl border w-4/5 md:w-3/5"
-        >
-          <div>
-            {error && (
-              <>
-                {showErrorToast(error)}
-                {setError("")}
-              </>
-            )}
+    <div className="min-h-screen w-full bg-gradient-to-b from-gray-900 to-black flex items-center justify-center p-4">
+      <div className="w-full max-w-md">
+        {error && (
+          <>
+            {showErrorToast(error)}
+            {setError("")}
+          </>
+        )}
+        
+        <div className="backdrop-blur-lg bg-gray-900/50 p-8 rounded-2xl border border-gray-800 shadow-2xl">
+          <div className="mb-8 text-center">
+            <h1 className="text-4xl font-bold bg-gradient-to-r from-[#64ffda] to-cyan-300 bg-clip-text text-transparent">
+              Create Account
+            </h1>
+            <p className="text-gray-400 mt-2">Join our community today</p>
           </div>
-          <p className="text-center text-[#64ffda] text-3xl">Register</p>
 
-            <div  className="flex items-end">
-            {/* Image Preview */}
-            {previewImage && (
-              <div>
-                <label htmlFor="file-input" onClick={() => setPreviewImage(null)}>
-                  <i className="fas fa-x text-[#64ffda] cursor-pointer"></i>
+          <form onSubmit={handleSubmit} className="space-y-6">
+            <div className="flex justify-center mb-6">
+              <div className="relative">
+                <div className="w-32 h-32 rounded-full overflow-hidden border-2 border-[#64ffda] shadow-lg">
+                  <img
+                    src={previewImage || `${backendUrl}/images/uploads/default.jpg`}
+                    alt="Profile Preview"
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+                <label className="absolute bottom-0 right-0 p-2 bg-gray-800 rounded-full cursor-pointer hover:bg-gray-700 transition-colors">
+                  <Camera className="w-5 h-5 text-[#64ffda]" />
+                  <input
+                    type="file"
+                    className="hidden"
+                    accept="image/*"
+                    onChange={handleImageChange}
+                  />
                 </label>
               </div>
-            )}
-            <img
-              src={
-                previewImage
-                ? previewImage
-                  : `${backendUrl}/images/uploads/default.jpg`
-              }
-              alt="Profile Preview"
-              style={{
-                width: "150px",
-                height: "150px",
-                borderRadius: "50%",
-              }}
-              />
-              <div className="relative flex items-center justify-center gap-2 p-3 mt-4 bg-[#1d2526] rounded-xl shadow-xl w-10">
+            </div>
+
+            <div className="space-y-4">
+              <div className="relative">
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                  <User className="h-5 w-5 text-[#64ffda]" />
+                </div>
                 <input
-                  className="fas fa-image bg-transparent border-none outline-none w-full text-[#2fb1bc]"
-                  type="file"
-                  capture="user"
-                  accept="image/*"
-                  name="file"
-                  onChange = {handleImageChange}
+                  required
+                  placeholder="Full Name"
+                  className="w-full pl-10 pr-4 py-3 bg-gray-800/50 border border-gray-700 focus:border-[#64ffda] rounded-xl outline-none text-gray-100 transition-all duration-200"
+                  type="text"
+                  name="name"
+                  value={formData.name}
+                  onChange={handleChange}
+                />
+              </div>
+
+              <div className="relative">
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                  <Mail className="h-5 w-5 text-[#64ffda]" />
+                </div>
+                <input
+                  required
+                  placeholder="Email"
+                  className="w-full pl-10 pr-4 py-3 bg-gray-800/50 border border-gray-700 focus:border-[#64ffda] rounded-xl outline-none text-gray-100 transition-all duration-200"
+                  type="email"
+                  name="email"
+                  value={formData.email}
+                  onChange={handleChange}
+                />
+              </div>
+
+              <div className="relative">
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                  <User className="h-5 w-5 text-[#64ffda]" />
+                </div>
+                <input
+                  required
+                  placeholder="Username"
+                  className="w-full pl-10 pr-4 py-3 bg-gray-800/50 border border-gray-700 focus:border-[#64ffda] rounded-xl outline-none text-gray-100 transition-all duration-200"
+                  type="text"
+                  name="username"
+                  value={formData.username}
+                  onChange={handleChange}
+                />
+              </div>
+
+              <div className="relative">
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                  <Lock className="h-5 w-5 text-[#64ffda]" />
+                </div>
+                <input
+                  required
+                  placeholder="Password"
+                  className="w-full pl-10 pr-4 py-3 bg-gray-800/50 border border-gray-700 focus:border-[#64ffda] rounded-xl outline-none text-gray-100 transition-all duration-200"
+                  type="password"
+                  name="password"
+                  value={formData.password}
+                  onChange={handleChange}
+                />
+              </div>
+
+              <div className="relative">
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                  <Lock className="h-5 w-5 text-[#64ffda]" />
+                </div>
+                <input
+                  required
+                  placeholder="Confirm Password"
+                  className="w-full pl-10 pr-4 py-3 bg-gray-800/50 border border-gray-700 focus:border-[#64ffda] rounded-xl outline-none text-gray-100 transition-all duration-200"
+                  type="password"
+                  name="confirmPassword"
+                  value={formData.confirmPassword}
+                  onChange={handleChange}
                 />
               </div>
             </div>
 
-          <div className="flex items-center border justify-center gap-2 p-4 bg-[#1b1b1b] rounded-xl shadow-xl w-full max-w-md">
-            <i className="fas fa-user text-[#64ffda]"></i>
-            <input
-              required
-              placeholder="Full Name"
-              className="bg-transparent border-none outline-none w-full text-[#ccd6f6] pl-4"
-              type="text"
-              name="name"
-              value={formData.name}
-              onChange={handleChange}
-            />
-          </div>
-          <div className="flex items-center border justify-center gap-2 p-4 bg-[#1b1b1b] rounded-xl shadow-inner w-full max-w-md">
-            <i className="fas fa-message text-[#64ffda]"></i>
-            <input
-              required
-              placeholder="Email"
-              className="bg-transparent border-none outline-none w-full text-[#ccd6f6] pl-4"
-              type="email"
-              name="email"
-              value={formData.email}
-              onChange={handleChange}
-            />
-          </div>
-          <div className="flex items-center border justify-center gap-2 p-4 bg-[#1b1b1b] rounded-xl shadow-inner w-full max-w-md">
-            <i className="fas fa-user text-[#64ffda]"></i>
-            <input
-              required
-              placeholder="Username"
-              className="bg-transparent border-none outline-none w-full text-[#ccd6f6] pl-4"
-              type="text"
-              name="username"
-              value={formData.username}
-              onChange={handleChange}
-            />
-          </div>
-          <div className="flex items-center border justify-center gap-2 p-4 bg-[#1b1b1b] rounded-xl shadow-inner w-full max-w-md">
-            <i className="fas fa-lock text-[#64ffda]"></i>
-            <input
-              required
-              placeholder="Password"
-              className="bg-transparent border-none outline-none w-full text-[#ccd6f6] pl-4"
-              type="password"
-              name="password"
-              value={formData.password}
-              onChange={handleChange}
-            />
-          </div>
-          <div className="flex items-center border justify-center gap-2 p-4 bg-[#1b1b1b] rounded-xl shadow-inner w-full max-w-md">
-            <i className="fas fa-lock text-[#64ffda]"></i>
-            <input
-              required
-              placeholder="Confirm Password"
-              className="bg-transparent border-none outline-none w-full text-[#ccd6f6] pl-4"
-              type="password"
-              name="confirmPassword"
-              value={formData.confirmPassword}
-              onChange={handleChange}
-            />
-          </div>
-          <div className="flex justify-evenly items-center gap-4">
-            <button
-              onClick={handleSubmit}
-              type="submit"
-              className="cursor-pointer py-3 px-6 rounded-xl border custom-btn font-bold transition-all duration-300 hover:bg-[#64ffda] hover:text-black hover:shadow-inner"
-            >
-              SignUp
-            </button>
-            <div className="text-white flex flex-col text-sm">
-              Already have an account?
-              <Link
-                className="cursor-pointer text-[#64ffda] font-bold transition-all duration-300  hover:text-white"
-                to="/login"
+            <div className="flex flex-col gap-4">
+              <button
+                type="submit"
+                className="w-full py-3 px-6 rounded-xl bg-gradient-to-r from-[#64ffda] to-cyan-400 text-gray-900 font-semibold hover:opacity-90 transition-all duration-200 transform hover:scale-[1.02]"
               >
-                Login
-              </Link>
+                Create Account
+              </button>
+
+              <div className="flex items-center justify-center gap-1 text-sm">
+                <span className="text-gray-400">Already have an account?</span>
+                <Link to="/login" className="text-[#64ffda] hover:text-cyan-300 font-medium">
+                  Sign In
+                </Link>
+              </div>
             </div>
-          </div>
-        </form>
-        <Link to="/" className="custom-btn mt-4">
-          Home
-        </Link>
+          </form>
+        </div>
+
+        <div className="mt-6 flex justify-center">
+          <Link
+            to="/"
+            className="flex items-center gap-2 text-gray-400 hover:text-[#64ffda] transition-colors"
+          >
+            <Home className="w-4 h-4" />
+            <span>Back to Home</span>
+          </Link>
+        </div>
       </div>
-      <ToastContainer
-                position="top-right"
-                autoClose={3000}
-                hideProgressBar={false}
-                closeOnClick
-                pauseOnHover
-            />
+      <ToastContainer position="top-right" autoClose={3000} />
     </div>
   );
 };
