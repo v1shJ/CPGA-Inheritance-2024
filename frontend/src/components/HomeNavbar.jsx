@@ -60,36 +60,36 @@ export default function Example() {
     }
   }, []);
 
-  function handleVerifyEmail() {
-    const user = localStorage.getItem("user");
-    const { email, id } = JSON.parse(user);
-    showLoaderToast("Sending verification email...");
-    if (user) {
-      axios
-        .post(
-          `${backendUrl}/api/send-verification-email`,
-          { email, id },
-          {
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem("token")}`,
-            },
-          }
-        )
-        .then((response) => {
-          toast.dismiss();
-          showInfoToast("Verification email sent successfully:");
-        })
-        .catch((error) => {
-          toast.dismiss();
-          showErrorToast("Error sending verification email:");
-        });
-    } else {
-      console.warn("No user data found in localStorage");
-    }
-  }
+  // function handleVerifyEmail() {
+  //   const user = localStorage.getItem("user");
+  //   const { email, id } = JSON.parse(user);
+  //   showLoaderToast("Sending verification email...");
+  //   if (user) {
+  //     axios
+  //       .post(
+  //         `${backendUrl}/api/send-verification-email`,
+  //         { email, id },
+  //         {
+  //           headers: {
+  //             Authorization: `Bearer ${localStorage.getItem("token")}`,
+  //           },
+  //         }
+  //       )
+  //       .then((response) => {
+  //         toast.dismiss();
+  //         showInfoToast("Verification email sent successfully:");
+  //       })
+  //       .catch((error) => {
+  //         toast.dismiss();
+  //         showErrorToast("Error sending verification email:");
+  //       });
+  //   } else {
+  //     console.warn("No user data found in localStorage");
+  //   }
+  // }
 
   return (
-    <div>
+    <div className="h-16 w-full mt-2">
       <Disclosure
         as="nav"
         className="border rounded-lg border-cyan-300 fixed w-full backdrop-blur-sm z-10"
@@ -176,7 +176,7 @@ export default function Example() {
                       Profile
                     </a>
                   </MenuItem>
-                  {!emailVerified && (
+                  {/* {!emailVerified && (
                     <MenuItem>
                       <NavLink
                         onClick={handleVerifyEmail}
@@ -185,13 +185,13 @@ export default function Example() {
                         Verify Email
                       </NavLink>
                     </MenuItem>
-                  )}
+                  )} */}
                   <MenuItem>
                     <NavLink
-                      to="#"
+                      to="/edit-profile"
                       className="block px-4 py-2 text-sm text-white hover:bg-gray-800"
                     >
-                      Settings
+                      Edit Profile
                     </NavLink>
                   </MenuItem>
                   <MenuItem>

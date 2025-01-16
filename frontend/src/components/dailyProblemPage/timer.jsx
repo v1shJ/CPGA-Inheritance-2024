@@ -28,19 +28,19 @@ const Countdown = () => {
   return (
     <div className="flex items-center justify-center gap-1 text-center auto-cols-max w-full">
       <div className="flex flex-col p-2 bg-cyan-500 rounded-lg">
-        <span className="countdown font-mono text-xl">
+        <span className="countdown font-mono text-xl text-white">
           <span style={{ "--value": timeLeft.hours }}>{timeLeft.hours}</span>
         </span>
       </div>
       <p className="text-cyan-300 text-bold text-lg">:</p>
       <div className="flex flex-col p-2 bg-cyan-500 rounded-lg">
-        <span className="countdown font-mono text-xl">
+        <span className="countdown font-mono text-xl text-white">
           <span style={{ "--value": timeLeft.minutes }}>{timeLeft.minutes}</span>
         </span>
       </div>
       <p className="text-cyan-300 text-bold text-lg">:</p>
       <div className="flex flex-col p-2 bg-cyan-500 rounded-lg">
-        <span className="countdown font-mono text-xl">
+        <span className="countdown font-mono text-xl text-white">
           <span style={{ "--value": timeLeft.seconds }}>{timeLeft.seconds}</span>
         </span>
       </div>

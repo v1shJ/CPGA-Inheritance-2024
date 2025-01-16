@@ -128,6 +128,7 @@ export async function getALLDailyProblems() {
 }
 
 export async function updateProblemStatus({contestId, index, points}) {
+  console.log(contestId, index, points);
   try {
     const response = await axios.post(`${backendURL}/api/update-problem-status`, {contestId, index, points}, {
       headers: {

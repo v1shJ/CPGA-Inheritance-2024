@@ -1,17 +1,21 @@
 import React from "react";
-import Navbar from "./HomeNavbar";
+import Navbar from "../HomeNavbar";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { useParams } from "react-router-dom";
-import Dashboard from "./Dashboard";
-import { showErrorToast, showSuccessToast } from "./toastify";
+import Dashboard from "../dashboard/Dashboard";
+import { showErrorToast, showSuccessToast } from "../toastify";
 const backendUrl = process.env.REACT_APP_BACKEND_URL;
 
 const Profile = () => {
   const [userData, setUserData] = useState({});
   const { id } = useParams();
-  const user = JSON.parse(localStorage.getItem("user"));
   useEffect(() => {
+    const user = JSON.parse(localStorage.getItem("user")); 
+    if(user.id === id){
+      setUserData(user);
+      return;
+    }
     axios
       .get(`${backendUrl}/api/${id}`, {
         headers: {
@@ -61,11 +65,9 @@ const Profile = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-900 to-black">
-      <div className="h-16">
         <Navbar />
-      </div>
-      
-      <div className="container mx-auto px-4 py-8">
+
+      <div className="container mx-auto px-4 py-8 ">
         <div className="max-w-6xl mx-auto space-y-8">
           {/* Profile Header */}
           <div className="bg-gradient-to-r from-gray-800 to-gray-900 rounded-lg shadow-xl p-6">
@@ -86,9 +88,11 @@ const Profile = () => {
                   </div>
                 </div>
               </div>
-              
+
               <div className="flex-grow space-y-4 text-center md:text-left">
-                <h2 className="text-2xl font-bold text-white">{userData.name}</h2>
+                <h2 className="text-2xl font-bold text-white">
+                  {userData.name}
+                </h2>
                 <div className="space-y-2">
                   <p className="text-cyan-300 flex items-center justify-center md:justify-start gap-2">
                     <i className="fas fa-user text-sm"></i>
@@ -140,14 +144,6 @@ const Profile = () => {
                       </div>
                     )
                 )}
-                { user.id === id &&
-                <a
-                  href="/getIds"
-                  className="block text-center mt-6 px-4 py-2 bg-cyan-600 hover:bg-cyan-700 text-white rounded-lg transition-colors"
-                >
-                  Add More Platform ID
-                </a>
-}
               </div>
             </div>
 
@@ -159,7 +155,8 @@ const Profile = () => {
                   Statistics
                 </h3>
               </div>
-              {totalDailyProblemsSolved !== undefined && totalPoints !== undefined ? (
+              {totalDailyProblemsSolved !== undefined &&
+              totalPoints !== undefined ? (
                 <div className="grid grid-cols-2 gap-4">
                   <div className="p-4 bg-gray-900/50 rounded-lg text-center">
                     <div className="text-3xl font-bold text-cyan-400">

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
-import { showSuccessToast, showErrorToast, showInfoToast, showCustomToast, showPromiseToast } from "./toastify.jsx";
+import { showSuccessToast, showErrorToast, showInfoToast, showCustomToast, showPromiseToast } from "../toastify.jsx";
 import { ToastContainer, toast} from 'react-toastify';
 import { User, Mail, Lock, Camera, ArrowLeft, Home } from "lucide-react";
 

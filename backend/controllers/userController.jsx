@@ -39,23 +39,16 @@ const registerUser = async (req, res) => {
       try {
         await user.save();
         let token = jwt.sign({ email: email, userID: user._id }, secretkey);
-
+        
+        const userObject = user.toObject();
+        delete userObject.password;
         res.json({
           status: "success",
           message: "Login successful",
           token: token,
-          user: {
-            id: user._id,
-            name: user.name,
-            username: user.username,
-            email: user.email,
-            image: user.image,
-            platformIds: user.platformIds,
-            problemTags: user.problemTags,
-            ratingRange: user.ratingRange,
-            dailyPoints: user.dailyPoints,
-          },
+          user: userObject,
         });
+
       } catch (err) {
         res.status(400).json({ status: "failed", message: err.message });
       }
@@ -88,22 +81,14 @@ const loginUser = async (req, res) => {
 
     let token = jwt.sign({ email: user.email, userID: user._id }, secretkey);
 
-    res.json({
-      status: "success",
-      message: "Login successful",
-      token: token,
-      user: {
-        id: user._id,
-        name: user.name,
-        username: user.username,
-        email: user.email,
-        image: user.image,
-        platformIds: user.platformIds,
-        problemTags: user.problemTags,
-        ratingRange: user.ratingRange,
-        dailyPoints: user.dailyPoints,
-      },
-    });
+        const userObject = user.toObject();
+        delete userObject.password;
+        res.json({
+          status: "success",
+          message: "Login successful",
+          token: token,
+          user: userObject,
+        });
   });
 };
 

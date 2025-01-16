@@ -10,26 +10,11 @@ import {
   ResponsiveContainer,
 } from "recharts";
 
-const CodeChefRatingGraph = ({ ratingData, isLoading = false }) => {
-  if (isLoading) {
-    return (
-      <div className="w-full max-w-3xl border rounded-lg shadow-sm">
-        <div className="p-6">
-          <div
-            className="flex items-center justify-center h-[400px]"
-            aria-live="polite"
-            aria-busy="true"
-          >
-            <p className="text-gray-500">Loading rating data...</p>
-          </div>
-        </div>
-      </div>
-    );
-  }
+const CodeChefRatingGraph = ({ ratingData }) => {
 
   if (!ratingData || ratingData.length === 0) {
     return (
-      <div className="w-full max-w-3xl border rounded-lg shadow-sm">
+      <div className="w-full max-w-3xl rounded-lg shadow-sm">
         <div className="p-6">
           <div
             className="flex items-center justify-center h-[400px]"

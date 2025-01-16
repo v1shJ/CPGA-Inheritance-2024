@@ -67,3 +67,16 @@ export const showLoaderToast = (message) => {
     style: toastTheme,
   });
 };
+
+
+export const showPromiseToast = async (promise, messages) => {
+  try {
+    await toast.promise(promise, {
+      ...messages,
+      style: toastTheme,
+    });
+  } catch (error) {
+    showErrorToast("Error fetching data. Please try again.");
+    console.error("Error fetching data:", error);
+  }
+};

@@ -50,7 +50,7 @@ const testimonials = [
 
 const Testimonials = () => {
   return (
-    <div className="bg-gradient-to-b to-black from-gray-800 flex flex-col justify-evenly items-center">  
+    <div className=" bg-gradient-to-t from-gray-[#1B2432] to-gray-800 flex flex-col justify-evenly items-center">  
     <h1 className="text-3xl text-white font-bold mb-4">What people are saying</h1>
     <p className="mb-8 text-gray-300">Thousands of developers and teams love Reweb.</p>
       <div className=" text-white p-8 w-4/5">

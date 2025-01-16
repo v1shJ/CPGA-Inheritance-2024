@@ -6,7 +6,7 @@ import CFRatingGraph from "./RatingGraphs/CFRatingGraph.jsx";
 import LCRatingGraph from "./RatingGraphs/LCRatingGraph.jsx";
 import CPStatsPieChart from "./PieChart.jsx";
 import { Loader } from "./loader/loader.jsx";
-import useFetchWithLocalStorage from "./FetchWithLocalStorage.jsx";
+import useFetchWithLocalStorage from "../FetchWithLocalStorage.jsx";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -14,14 +14,14 @@ import {
   ConvertCFData,
   CombineHeatMapData,
   ConvertLCData,
-} from "./utils/modifyData.jsx";
-import { FetchData, fetchCodeChefData } from "./Api.jsx";
+} from "../utils/modifyData.jsx";
+import { FetchData, fetchCodeChefData } from "../Api.jsx";
 import {
   showSuccessToast,
   showErrorToast,
   showInfoToast,
   showLoaderToast,
-} from "./toastify.jsx";
+} from "../toastify.jsx";
 
 export default function Dashboard() {
   const [CCData, setCCData] = useState(null);
@@ -277,7 +277,7 @@ export default function Dashboard() {
           <div className="flex flex-wrap justify-center items-center gap-4 md:gap-8 mt-4">
             {platforms.map((platform) => (
               <div
-                className="flex items-center space-x-3 bg-gradient-to-r from-blue-900 to-cyan-900 text-white p-3 border border-cyan-800/30 rounded-xl shadow-lg hover:shadow-cyan-900/20 transition-all duration-300"
+                className="flex items-center space-x-3 !bg-gradient-to-r !from-blue-900 !to-cyan-900 text-white p-3 border border-cyan-800/30 rounded-xl shadow-lg hover:shadow-cyan-900/20 transition-all duration-300"
                 key={platform.name}
               >
                 <img

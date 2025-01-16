@@ -23,7 +23,7 @@ export default function LandingPage() {
   ];
 
   return (
-    <div id="home" className="min-h-screen bg-gradient-to-b from-gray-900 to-gray-800 flex items-center">
+    <div id="home" className="min-h-screen flex items-center">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24">
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           {/* Left Column */}

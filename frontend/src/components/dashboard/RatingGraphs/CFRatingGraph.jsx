@@ -10,13 +10,9 @@ import {
   ResponsiveContainer,
 } from "recharts";
 
-const CodeforcesRatingGraph = ({ ratingData, isLoading = false }) => {
-  if (isLoading) {
-    return <p>Loading rating data...</p>;
-  }
-
+const CodeforcesRatingGraph = ({ ratingData }) => {
   if (!ratingData || ratingData.length === 0) {
-    return <p>No contest participation data available</p>;
+    return <p className="text-red-500">No contest participation data available</p>;
   }
 
   const formattedData = ratingData.map((entry) => ({

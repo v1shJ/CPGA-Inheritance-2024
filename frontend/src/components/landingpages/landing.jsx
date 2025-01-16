@@ -1,17 +1,17 @@
 import React from "react";
-import "./landingpages/button.css";
+import "./button.css";
 import "animate.css";
-import MyNavbar from "./landingpages/navbar";
-import About from "./landingpages/about";
-import LandingPage from "./landingpages/LandingPage";
+import MyNavbar from "./navbar";
+import About from "./about";
+import LandingPage from "./LandingPage";
 import Footer from "./Footer";
-import Testimonials from "./landingpages/testimonials";
-import FAQ from "./landingpages/FAQ";
+import Testimonials from "./testimonials";
+import FAQ from "./FAQ";
 
 const Landing = () => {
   return (
-    <div>
-      <div className="h-16 bg-[#121928]">
+    <div className=" bg-gradient-to-b from-gray-900 to-gray-800">
+      <div>
         <MyNavbar />
       </div>
       <div>

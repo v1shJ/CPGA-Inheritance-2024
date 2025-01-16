@@ -31,7 +31,7 @@ const FAQ = () => {
   ];
 
 return (
-    <main id='faqs' className="p-5 bg-gradient-to-b from-black to-gray-800">
+    <main id='faqs' className="p-5">
         <div className="flex flex-col justify-center items-center my-2">
           <h1 className="text-4xl font-semibold text-cyan-400 mb-4">Frequently Asked Questions</h1>
             <div className="w-full sm:w-10/12 md:w-1/2 my-1">

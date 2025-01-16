@@ -1,12 +1,11 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
-import useFetchWithLocalStorage from "./FetchWithLocalStorage.jsx";
-import {FetchData} from "./Api";
+import useFetchWithLocalStorage from "../FetchWithLocalStorage.jsx";
 import { useState } from "react";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { showLoaderToast, showSuccessToast, showInfoToast } from "./toastify.jsx";
-import {updateProblemStatus} from "./Api";
+import { showLoaderToast, showSuccessToast, showInfoToast } from "../toastify.jsx";
+import {updateProblemStatus, FetchData} from "../Api";
 import Countdown from "./timer.jsx";
 
 export default function DailyProblemCard({problem, ind}) {
@@ -15,15 +14,18 @@ export default function DailyProblemCard({problem, ind}) {
     return new Date(dateString).toLocaleDateString(undefined, options);
   };
   const [data, setData] = useState({});
+  const [isSolved, setIsSolved] = useState(problem.status==="solved");
 
   const fetchCfSolvedProblem = useFetchWithLocalStorage(
     "CFData2",
     FetchData,
     setData
   );
-
+  
+  // console.log("rerendering component" + ind);
   function handleRefresh(){
-    if(problem.status === "solved") {
+
+    if(isSolved) {
       showInfoToast("Problem already solved");
       return;
     }
@@ -42,28 +44,31 @@ export default function DailyProblemCard({problem, ind}) {
           const pathSegments = url.pathname.split('/');
           const contestId = pathSegments[2];
           const index = pathSegments[4];
-          let points = 0;
+          let points = problem.points? problem.points: 500;
           const currentDate = new Date();
           const problemDate = new Date(problem.date);
           const dailyFetchTime = new Date();
           dailyFetchTime.setHours(0, 0, 0, 0);
 
-          if (problemDate > dailyFetchTime && problemDate <= currentDate) {
-            points = problem.points;
+          if (!(problemDate > dailyFetchTime && problemDate <= currentDate)) {
+            points = 0;
           }
-
-          if(problemSolved[0].problem.contestId == contestId && problemSolved[0].problem.index === index &&  problemSolved[0]["verdict"] === "OK") {
-            problem.status = "solved";
-            
+            const solvedProblem = problemSolved.find(p => p.problem.contestId == contestId && p.problem.index === index && p.verdict === "OK");
+            if (solvedProblem) {
             const previousLocalStorageData = JSON.parse(localStorage.getItem("dailyProblem"));
             previousLocalStorageData[ind].status = "solved";
             localStorage.setItem("dailyProblem", JSON.stringify(previousLocalStorageData));
             const fetchTime = new Date().toISOString();
             localStorage.setItem("fetchTimeOfDailyProblem", fetchTime);
-
+            
             updateProblemStatus({contestId, index, points});
+            setIsSolved(true);
+            problem.status = "solved";
+            showSuccessToast("Yay! Problem solved successfully");   
           }
-          showSuccessToast("Data Refreshed Successfully");   
+          else {
+            showInfoToast("Problem not solved yet");
+          }
         } else {
           toast.dismiss(); // Dismiss the info toast
           showInfoToast(
@@ -87,7 +92,7 @@ export default function DailyProblemCard({problem, ind}) {
   return (
     <div
     className={`w-full transition-all duration-300 hover:scale-[1.01] ${
-      problem.status === "solved" 
+      problem.status === "solved"
         ? "bg-cyan-900/40 border border-cyan-700/50" 
         : "bg-gray-900/90 border border-gray-700/50"
     } ${
@@ -139,10 +144,10 @@ export default function DailyProblemCard({problem, ind}) {
           target="_blank"
           className="px-6 py-3 bg-cyan-500 hover:bg-cyan-400 text-white font-medium rounded-lg transition-colors"
         >
-          {problem.status==="pending"? "Solve Problem": "View Problem"}
+          {problem.status==="solved"? "View Problem": "Solve Problem"}
         </NavLink>
         
-        {isDailyProblem && (
+        {isDailyProblem && problem.status==="pending" &&(
           <div className="flex-shrink-0">
             <Countdown />
           </div>

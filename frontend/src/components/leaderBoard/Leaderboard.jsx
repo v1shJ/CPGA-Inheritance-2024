@@ -2,7 +2,7 @@ import React from "react";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { NavLink } from "react-router-dom";
-import HomeNavbar from "./HomeNavbar";
+import HomeNavbar from "../HomeNavbar";
 import { Trophy, Medal, Award } from 'lucide-react';
 
 const backendUrl = process.env.REACT_APP_BACKEND_URL;
@@ -96,7 +96,7 @@ export default function Leaderboard() {
 
 return (
     <div className="min-h-screen bg-gradient-to-b from-gray-900 to-gray-800">
-      <div className="mt-2 h-16">
+      <div>
         <HomeNavbar />
       </div>
 
