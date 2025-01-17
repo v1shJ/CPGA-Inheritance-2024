@@ -13,7 +13,7 @@ const EditProfilePage = () => {
   const navItems = [
     { id: "profile", label: "Profile Information", icon: UserCircle },
     { id: "contact", label: "Contact Details", icon: Phone },
-    { id: "social", label: "Social Accounts", icon: Share2 },
+    { id: "social", label: "Platform Accounts", icon: Share2 },
     { id: "security", label: "Security Settings", icon: Lock },
   ];
 

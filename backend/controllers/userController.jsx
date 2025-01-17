@@ -42,6 +42,8 @@ const registerUser = async (req, res) => {
         
         const userObject = user.toObject();
         delete userObject.password;
+        delete userObject._id;
+        userObject.id = user._id;
         res.json({
           status: "success",
           message: "Login successful",
@@ -83,6 +85,8 @@ const loginUser = async (req, res) => {
 
         const userObject = user.toObject();
         delete userObject.password;
+        delete userObject._id;
+        userObject.id = user._id;
         res.json({
           status: "success",
           message: "Login successful",
