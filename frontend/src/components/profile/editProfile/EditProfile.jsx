@@ -36,7 +36,7 @@ const EditProfilePage = () => {
   };
 
   return (
-    <div className="max-h-screen md:overflow-hidden bg-gradient-to-b from-gray-900 via-gray-800 to-gray-900">
+    <div className=" md:overflow-hidden bg-gradient-to-b from-gray-900 via-gray-800 to-gray-900">
       <HomeNavbar />
 
       {/* Mobile Navigation */}
@@ -116,7 +116,7 @@ const EditProfilePage = () => {
         )}
 
         {/* Main Content */}
-        <main className="flex-1 p-4 md:p-8 overflow-y-auto"> 
+        <main className="flex-1 p-4 md:p-8"> 
           {renderContent()}
         </main>
       </div>

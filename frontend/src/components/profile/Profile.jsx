@@ -5,14 +5,15 @@ import axios from "axios";
 import { useParams } from "react-router-dom";
 import Dashboard from "../dashboard/Dashboard";
 import { showErrorToast, showSuccessToast } from "../toastify";
+import { User } from "lucide-react";
 const backendUrl = process.env.REACT_APP_BACKEND_URL;
 
 const Profile = () => {
   const [userData, setUserData] = useState({});
   const { id } = useParams();
   useEffect(() => {
-    const user = JSON.parse(localStorage.getItem("user")); 
-    if(user.id === id){
+    const user = JSON.parse(localStorage.getItem("user"));
+    if (user.id === id) {
       setUserData(user);
       return;
     }
@@ -23,11 +24,13 @@ const Profile = () => {
         },
       })
       .then((response) => {
-        setUserData(response.data);
+        setUserData(response.data.user);
+        console.log(response.data);
         showSuccessToast("User data fetched successfully");
       })
       .catch((error) => {
         showErrorToast("Error fetching user data from backend");
+        console.error("Error fetching user data from backend:", error);
       });
   }, [id]);
 
@@ -65,7 +68,7 @@ const Profile = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-900 to-black">
-        <Navbar />
+      <Navbar />
 
       <div className="container mx-auto px-4 py-8 ">
         <div className="max-w-6xl mx-auto space-y-8">
@@ -73,19 +76,16 @@ const Profile = () => {
           <div className="bg-gradient-to-r from-gray-800 to-gray-900 rounded-lg shadow-xl p-6">
             <div className="flex flex-col md:flex-row items-center gap-8">
               <div className="flex-shrink-0">
-                <div className="relative">
-                  <img
-                    src={
-                      userData.image
-                        ? `${backendUrl}/images/uploads/${userData.image}`
-                        : `${backendUrl}/images/uploads/default.jpg`
-                    }
-                    alt="User Profile"
-                    className="w-32 h-32 rounded-full object-cover border-4 border-cyan-500/20"
-                  />
-                  <div className="absolute -bottom-2 left-1/2 transform -translate-x-1/2 bg-cyan-500 px-3 py-1 rounded-full">
-                    <span className="text-xs text-white">Active</span>
-                  </div>
+                <div className="w-32 h-32 rounded-full overflow-hidden border-2 border-[#64ffda] shadow-lg">
+                  {userData?.image? (
+                    <img
+                      src={`${backendUrl}/images/uploads/${userData.image}`}
+                      alt="Profile"
+                      className="h-full w-full rounded-full object-cover"
+                    />
+                  ) : (
+                    <User className="h-full w-full p-1 text-gray-400 object-cover" />
+                  )}
                 </div>
               </div>
 

@@ -1,7 +1,9 @@
 import React from "react";
-import { AtSign } from "lucide-react";
 import { useState, useEffect } from "react";
-import { showSuccessToast } from "../../toastify";
+import { showSuccessToast, showErrorToast } from "../../toastify";
+import axios from "axios";
+import { ToastContainer } from "react-toastify";
+const backendUrl = process.env.REACT_APP_BACKEND_URL;
 
 export default function EditContactDetails() {
   // const [isEmailVerified, setIsEmailVerified] = useState(false);
@@ -26,14 +28,38 @@ export default function EditContactDetails() {
     }
   }, []);
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        const userInfo = JSON.parse(localStorage.getItem('user'));
-        const updatedUserInfo = { ...userInfo, email: formData.email };
-        localStorage.setItem('user', JSON.stringify(updatedUserInfo));
-        showSuccessToast('Email updated successfully');
-    }
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const token = localStorage.getItem("token");
 
+    const formdata = {
+      email: formData.email,
+    }
+    axios
+      .post(
+        `${backendUrl}/api/update-email`,
+        formdata,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      )
+      .then((response) => {
+        if (response.data.success) {
+          localStorage.setItem("user", JSON.stringify(response.data.user));
+          showSuccessToast("Email updated successfully");
+        } else {
+          showErrorToast("Error updating email");
+          console.error("Error updating email:", response.data.message);
+        }
+      })
+      .catch((error) => {
+        showErrorToast("Server error");
+        console.error("Error updating email:", error);
+      });
+    
+  };
   return (
     <div className="space-y-6">
       <h2 className="text-2xl font-semibold text-white mb-6">
@@ -75,6 +101,7 @@ export default function EditContactDetails() {
           Update Email
         </button>
       </div>
+      <ToastContainer/>
     </div>
   );
 }

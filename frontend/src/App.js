@@ -6,7 +6,6 @@ import "@fortawesome/fontawesome-free/css/all.min.css";
 import "./App.css";
 import Home from "./components/Home.jsx";
 import About from "./components/landingpages/about.jsx";
-import Discussion from "./components/discussion.jsx";
 import Chatbot from "./components/chatbot.jsx";
 import Profile from "./components/profile/Profile.jsx";
 import Idform from "./components/profile/Idform.jsx";
@@ -16,6 +15,7 @@ import DailyProblems from "./components/dailyProblemPage/DailyProblems.jsx";
 import "react-toastify/dist/ReactToastify.css";
 import DailyProblemForm from "./components/dailyProblemPage/DailyProblemForm.jsx";
 import EditProfile from "./components/profile/editProfile/EditProfile.jsx";
+import Discussion from "./components/discussionPage/discussion.jsx";
 
 function checkLogin() {
   const token = localStorage.getItem("token");
@@ -76,6 +76,10 @@ function App() {
       path: "/edit-profile",
       element: checkLogin() ? <EditProfile /> : <Login />,
     },
+    {
+      path: "/discussion",
+      element: checkLogin() ? <Discussion /> : <Login />,
+    }
   ]);
 
   return (

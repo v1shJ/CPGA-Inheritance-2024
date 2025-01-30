@@ -13,6 +13,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import { showErrorToast, showInfoToast, showLoaderToast } from "./toastify";
+import { User } from "lucide-react";
 
 const backendUrl = process.env.REACT_APP_BACKEND_URL;
 
@@ -29,36 +30,16 @@ function classNames(...classes) {
 }
 
 function handleLogout() {
-  window.location.href = "/";
   localStorage.clear();
+  window.location.href = "/";
 }
 
 export default function Example() {
-  const [image, setImage] = useState("");
-  const [emailVerified, setEmailVerified] = useState(false);
+  const user = JSON.parse(localStorage.getItem("user"));
+  const image = user.image;
+  // const [emailVerified, setEmailVerified] = useState(user.emailVerified);
 
-  useEffect(() => {
-    const user = localStorage.getItem("user");
-    if (user) {
-      const { id } = JSON.parse(user);
-      axios
-        .get(`${backendUrl}/api/${id}`, {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        })
-        .then((response) => {
-          const { image, emailVerified } = response.data;
-          setImage(image);
-          setEmailVerified(emailVerified);
-        })
-        .catch((error) => {
-          showErrorToast("Error fetching user data from backend:");
-        });
-    } else {
-      console.warn("No user data found in localStorage");
-    }
-  }, []);
+
 
   // function handleVerifyEmail() {
   //   const user = localStorage.getItem("user");
@@ -136,14 +117,14 @@ export default function Example() {
               </div>
             </div>
             <div className="absolute inset-y-0 right-0 flex items-center pr-2 lg:static lg:inset-auto lg:ml-6 lg:pr-0">
-              <button
+              {/* <button
                 type="button"
                 className="relative rounded-full p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
               >
                 <span className="absolute -inset-1.5" />
                 <span className="sr-only">View notifications</span>
                 <BellIcon aria-hidden="true" className="size-6" />
-              </button>
+              </button> */}
 
               {/* Profile dropdown */}
               <Menu as="div" className="relative">
@@ -151,15 +132,18 @@ export default function Example() {
                   <MenuButton className="relative flex rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
                     <span className="absolute -inset-1.5" />
                     <span className="sr-only">Open user menu</span>
-                    <img
-                      alt=""
-                      src={
-                        image
-                          ? `${backendUrl}/images/uploads/${image}`
-                          : `${backendUrl}/images/uploads/default.jpg`
-                      }
-                      className="size-8 rounded-full"
-                    />
+                    <div className="w-10 h-10 rounded-full overflow-hidden border-1 border-[#64ffda] shadow-lg">
+                      {image ? (
+                        <img
+                          src={`${backendUrl}/images/uploads/${image}`}
+                          alt="Profile"
+                          className="h-full w-full rounded-full object-cover"
+                        />
+                      ) : (
+                        
+                        <User className="h-full w-full p-1 text-gray-400 object-cover" />
+                      )}
+                    </div>
                   </MenuButton>
                 </div>
                 <MenuItems

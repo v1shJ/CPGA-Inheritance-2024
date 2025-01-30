@@ -1,7 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 
-export default function ProblemPreference({ dailyProblemPreference }) {
+export default function ProblemPreference({ problemTags }) {
     const navigate = useNavigate();
     const handleOnClick = () => {
         navigate("/daily-problem-form");
@@ -13,7 +13,7 @@ export default function ProblemPreference({ dailyProblemPreference }) {
           <h2 className="text-sm font-medium text-gray-400">Selected Tags</h2>
           <div className="flex flex-wrap gap-2">
             {(
-              dailyProblemPreference?.problemTags || [
+              problemTags || [
                 "array",
                 "math",
                 "implementation",

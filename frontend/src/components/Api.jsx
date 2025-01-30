@@ -24,7 +24,8 @@ export function FetchData(key, token, id) {
           else if(key === "CFData" || key === "CFData2" || key === "CFUserInfo") platform = "Codeforces";
           else if(key === "LCData" || key === "LCContestData") platform = "LeetCode";
 
-           const platformID =response.data.platformIds[0][platform];
+          const user = response.data?.user;
+           const platformID =user?.platformIds?.[0]?.[platform];
 
           if (platformID) {
             console.log(`${platform}` + " ID: " + platformID); 
@@ -52,7 +53,8 @@ export async function fetchCodeChefData(key ,token, id) {
         Authorization: `Bearer ${token}`,
       },
     });
-    const userHandle = response.data.platformIds[0]["CodeChef"];
+    const user = response.data?.user;
+    const userHandle =user?.platformIds?.[0]?.["CodeChef"];
     const ccresponse = await axios.post(`${backendURL}/api/getcc-problem-count`, { userHandle }, {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -60,7 +62,7 @@ export async function fetchCodeChefData(key ,token, id) {
     });
     return ccresponse.data.totalProblemsSolved;
   } catch (err) {
-    console.log(err.message);
+    console.log(err?.message);
   }
 };
 

@@ -12,9 +12,12 @@ import FilterStats from "./FilterStats";
 import ProblemPreference from "./ProblemPreference";
 
 export default function DailyProblems() {
+  
+  const user = JSON.parse(localStorage.getItem("user"));
+  const problemTags = user?.problemTags;
   const [problems, setProblems] = useState([]);
   const [filteredProblems, setFilteredProblems] = useState(problems);
-  const [searchQuery, setSearchQuery] = useState("");
+  const [setSearchQuery] = useState("");
   const problemRefs = useRef({});
 
   const handleSearch = (query) => {
@@ -38,7 +41,7 @@ export default function DailyProblems() {
     }
   };
 
-  const toFetchDailyProblem = async (problems) => {
+  const shouldFetchDailyProblem = async (problems) => {
     const dailyFetchTime = new Date();
     dailyFetchTime.setHours(0, 0, 0, 0);
 
@@ -107,7 +110,7 @@ export default function DailyProblems() {
 
       if (storedProblems && storedProblems.length > 0) {
         setProblems(storedProblems);
-        await toFetchDailyProblem(storedProblems);
+        await shouldFetchDailyProblem(storedProblems);
         return;
       }
 
@@ -116,7 +119,7 @@ export default function DailyProblems() {
         if (!response || response.length === 0) {
           console.warn("No daily problems available.");
           showInfoToast("No daily problems available!");
-          await toFetchDailyProblem(response);
+          await shouldFetchDailyProblem(response);
           return;
         }
 
@@ -127,7 +130,7 @@ export default function DailyProblems() {
           new Date().toISOString()
         );
 
-        await toFetchDailyProblem(response);
+        await shouldFetchDailyProblem(response);
         showSuccessToast("All Daily problems fetched successfully!");
       } catch (error) {
         console.error("Error fetching all daily problems:", error);
@@ -173,18 +176,14 @@ export default function DailyProblems() {
     }
   };
 
-  const dailyProblemPreference = JSON.parse(
-    localStorage.getItem("dailyProblemPreference") || "{}"
-  );
-
   return (
-    <div className="min-h-screen flex flex-col items-center bg-gradient-to-b from-gray-900 to-gray-800 w-full">
+    <div className="min-h-screen flex flex-col  bg-gradient-to-b from-gray-900 to-gray-800 w-full">
       <HomeNavbar />
 
       <div className=" w-full h-full flex flex-col items-center">
-        <div className="h-72 w-full flex items-center justify-center ">
+        <div className="min-h-72 w-full flex items-center justify-center ">
           <div className="flex backdrop-blur-sm flex-col gap-4 mb-8 w-11/12">
-            <ProblemPreference problemPreference={dailyProblemPreference} />
+            <ProblemPreference problemTags={problemTags} />
             <SortControls onSort={handleSort} currentSort={sortType} />
             <SearchBar onSearch={handleSearch} />
           </div>

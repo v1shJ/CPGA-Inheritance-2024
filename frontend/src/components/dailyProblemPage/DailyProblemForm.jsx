@@ -1,18 +1,17 @@
 import React, { useState } from "react";
 import HomeNavbar from "../HomeNavbar";
 import axios from "axios";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { NavLink } from "react-router-dom";
 const backendUrl = process.env.REACT_APP_BACKEND_URL;
 
 const DailyProblemForm = () => {
-  const [selectedTags, setSelectedTags] = useState(["array", "math", "implementation"]);
+
+  const user = JSON.parse(localStorage.getItem("user"));
+  const [selectedTags, setSelectedTags] = useState(user.problemTags);
   const [showTagAlert, setShowTagAlert] = useState(false);
-  const [ratingRange, setRatingRange] = useState({
-    min: 800,
-    max: 1800
-  });
+  const [ratingRange, setRatingRange] = useState(user.ratingRange);
 
   const problemTags = [
     "brute force",
@@ -121,12 +120,12 @@ const DailyProblemForm = () => {
         }
       }
     );
+    // Store the data in local storage
+    localStorage.setItem("user", JSON.stringify({ ...user, problemTags: selectedTags, ratingRange }));
 
     // Navigate to the daily problem page
     window.location.href = "/dailyProblems";
 
-    // Store the data in local storage
-    localStorage.setItem("dailyProblemPreference", JSON.stringify(data));
   };
 
   const [isExpanded, setIsExpanded] = useState(false);

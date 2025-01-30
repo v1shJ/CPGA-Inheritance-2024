@@ -29,6 +29,10 @@ app.get("/", (req, res) => {
 
 const userRouter = require("./routes/userRoute");
 app.use("/api/user", userRouter);
+
+const discussionRouter = require("./routes/discussionRoute");
+app.use("/api/discussions", discussionRouter);
+
 const otherRouter = require("./routes/otherRoute");
 app.use("/api", otherRouter);
 

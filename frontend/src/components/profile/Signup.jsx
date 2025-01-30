@@ -1,10 +1,12 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
-import { showSuccessToast, showErrorToast, showInfoToast, showCustomToast, showPromiseToast } from "../toastify.jsx";
-import { ToastContainer, toast} from 'react-toastify';
-import { User, Mail, Lock, Camera, ArrowLeft, Home } from "lucide-react";
-
+import {
+  showSuccessToast,
+  showErrorToast
+} from "../toastify.jsx";
+import { ToastContainer } from "react-toastify";
+import { User, Mail, Lock, Camera, Home } from "lucide-react";
 
 const Form = () => {
   const backendUrl = process.env.REACT_APP_BACKEND_URL;
@@ -74,7 +76,6 @@ const Form = () => {
     formdata.append("password", formData.password);
 
     try {
-      console.log(formData);
       const response = await axios.post(
         `${backendUrl}/api/user/register`,
         formdata,
@@ -85,7 +86,7 @@ const Form = () => {
       localStorage.setItem("token", response.data.token);
       localStorage.setItem("user", JSON.stringify(response.data.user));
       // console.log(response);
-      
+
       showSuccessToast("User added successfully"); // Notify user of success
       setFormData({
         file: "",
@@ -100,7 +101,7 @@ const Form = () => {
       setError("");
       window.location.replace("/getIds");
     } catch (err) {
-      setError(err.response.data.message);
+      setError(err?.response?.data?.message);
     }
   };
 
@@ -113,7 +114,7 @@ const Form = () => {
             {setError("")}
           </>
         )}
-        
+
         <div className="backdrop-blur-lg bg-gray-900/50 p-8 rounded-2xl border border-gray-800 shadow-2xl">
           <div className="mb-8 text-center">
             <h1 className="text-4xl font-bold bg-gradient-to-r from-[#64ffda] to-cyan-300 bg-clip-text text-transparent">
@@ -126,11 +127,15 @@ const Form = () => {
             <div className="flex justify-center mb-6">
               <div className="relative">
                 <div className="w-32 h-32 rounded-full overflow-hidden border-2 border-[#64ffda] shadow-lg">
-                  <img
-                    src={previewImage || `${backendUrl}/images/uploads/default.jpg`}
-                    alt="Profile Preview"
-                    className="w-full h-full object-cover"
-                  />
+                {previewImage ? (
+                    <img
+                      src={previewImage}
+                      alt="Profile"
+                      className="h-full w-full rounded-full object-cover"
+                    />
+                  ) : (
+                    <User className="h-full w-full p-6 text-gray-400 object-cover" />
+                  )}
                 </div>
                 <label className="absolute bottom-0 right-0 p-2 bg-gray-800 rounded-full cursor-pointer hover:bg-gray-700 transition-colors">
                   <Camera className="w-5 h-5 text-[#64ffda]" />
@@ -231,7 +236,10 @@ const Form = () => {
 
               <div className="flex items-center justify-center gap-1 text-sm">
                 <span className="text-gray-400">Already have an account?</span>
-                <Link to="/login" className="text-[#64ffda] hover:text-cyan-300 font-medium">
+                <Link
+                  to="/login"
+                  className="text-[#64ffda] hover:text-cyan-300 font-medium"
+                >
                   Sign In
                 </Link>
               </div>

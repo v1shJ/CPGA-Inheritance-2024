@@ -77,8 +77,8 @@ const IdForm = () => {
   };
 
   return (
-    <div className="overflow-hidden  bg-gradient-to-b from-gray-900 via-gray-800 to-gray-900 flex items-center justify-center" >
-      <div className="px-6 py-8 w-full lg:w-1/2 min-h-screen">
+    <div className="bg-gradient-to-b from-gray-900 via-gray-800 to-gray-900 flex items-center justify-center" >
+      <div className="py-2 w-full lg:w-1/2 min-h-screen">
         <div className="flex items-center justify-center mb-8">
           <Activity className="h-8 w-8 text-cyan-500 mr-2" />
           <h2 className="text-2xl font-bold text-white">
