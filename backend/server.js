@@ -5,7 +5,7 @@ const bodyParser = require("body-parser");
 const path = require("path");
 require("dotenv").config();
 const connectDB = require("./config/mongoDB.js");
-
+const auth = require("./middleware/auth");
 const port = process.env.PORT || 5000;
 
 app.use(
@@ -27,6 +27,7 @@ app.get("/", (req, res) => {
   res.send("Server is running!!");
 });
 
+
 const userRouter = require("./routes/userRoute");
 app.use("/api/user", userRouter);
 
@@ -35,6 +36,9 @@ app.use("/api/discussions", discussionRouter);
 
 const otherRouter = require("./routes/otherRoute");
 app.use("/api", otherRouter);
+
+const { chatWithBot } = require("./controllers/chatbotControllers.jsx");
+app.post("/chat", auth, chatWithBot);
 
 app.listen(port, () => {
   console.log(`Server is running on port: ${port}`);

@@ -2,6 +2,11 @@ import React, {useState } from "react";
 import { motion } from "framer-motion";
 import videoSrc from "../../assets/WebsiteVideo.mp4";
 import placeholder from "../../assets/placeholder.png";
+import DashboardPage from "../../assets/DashboardPage.png";
+import ChatbotPage from "../../assets/ChatbotPage.png";
+import DiscussionPage from "../../assets/DiscussionPage.png";
+import DailyProblemPage from "../../assets/DailyProblemPage.png";
+import LeaderboardPage from "../../assets/LeaderboardPage.png";
 
 const FeatureCard = ({ image, description, index }) => (
   <motion.div
@@ -16,7 +21,7 @@ const FeatureCard = ({ image, description, index }) => (
       <div className="flex flex-col md:flex-row gap-6 items-center relative z-2">
         <div className="w-full md:w-1/2 overflow-hidden rounded-xl">
           <img
-            src={placeholder}
+            src={image}
             alt="Feature"
             className="w-full h-64 object-cover transform transition-transform duration-300 group-hover:scale-105"
           />
@@ -89,26 +94,27 @@ const About = () => {
 
   const features = [
     {
-      image: {placeholder},
-      description: "Master algorithmic problem-solving with our comprehensive learning paths and structured curriculum."
+      image: DashboardPage,
+      description: "Access an interactive dashboard that provides an overview of your progress, problem-solving stats, and personalized recommendations."
     },
     {
-      image: {placeholder},
-      description: "Practice with carefully curated problems that progressively build your competitive programming skills."
+      image: ChatbotPage,
+      description: "Engage with an AI-powered chatbot to receive instant guidance on problem-solving, algorithms, and coding doubts."
     },
     {
-      image: {placeholder},
-      description: "Get instant feedback and detailed explanations to understand complex algorithms and data structures."
+      image: DiscussionPage,
+      description: "Participate in discussions with fellow programmers, ask doubts, and share insights on the dedicated discussion page."
     },
     {
-      image: {placeholder},
-      description: "Join a community of passionate programmers and learn from peer discussions and expert insights."
+      image: DailyProblemPage,
+      description: "Solve a new challenge every day with our daily problem feature, designed to enhance your problem-solving skills."
     },
     {
-      image: {placeholder},
-      description: "Track your progress with detailed analytics and performance metrics to identify areas for improvement."
+      image: LeaderboardPage,
+      description: "Compare your performance with others on the leaderboard and track your competitive programming rankings."
     }
   ];
+  
 
   return (
     <div id="about" className="min-h-96">

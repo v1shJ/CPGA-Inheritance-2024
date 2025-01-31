@@ -1,7 +1,7 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
 import { ArrowRight, Code, Target, Users } from "lucide-react";
-import Image from "../../assets/LandingPageImage.png";
+import Image from "../../assets/DashboardPage.png";
 
 export default function LandingPage() {
   const features = [
