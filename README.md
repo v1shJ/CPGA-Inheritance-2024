@@ -79,7 +79,6 @@ List down all the partially implemented features in your project
   - other people in dicussion
   - chatbot
   - monitoring your progress through data
-  - 
 ## 🛠Project Setup
 
 For the Web-App 1.Clone the GitHub repo.
@@ -104,10 +103,10 @@ git clone https://github.com/RushabhMehta2005/CPGA-Inheritance-2024/
 
 Add names of your team members with their emails and links to their GitHub accounts
 
-- [Team Member 1 ](https://github.com/RushabhMehta2005/)
-- [Team Member 2 ](https://github.com/sid-7905/)
-- [Team Member 2 ](https://github.com/Rahuldesai0/)
-- [Team Member 2 ](https://github.com/v1shJ/)
+- [Rushabh Mehta](https://github.com/RushabhMehta2005/)
+- [Siddhesh Pandey](https://github.com/sid-7905/)
+- [Rahul Desai](https://github.com/Rahuldesai0/)
+- [Vansh Jalora](https://github.com/v1shJ/)
 
 ## 👨‍🏫Mentors
 
