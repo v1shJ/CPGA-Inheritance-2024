@@ -60,22 +60,31 @@ You can use icons too - find them [here](https://github.com/get-icon/geticon)
 ## 📈Progress
 
 List down all the fully implemented features in your project
-- 
-
+- Home page with statistical data about your competitive programming profiles like Codeforces, Codechef, Leetcode
+- Daily problem suggestions based on your preferences and skill level
+- Discussion page to ask doubts to more experienced programmers
+- Chatbot to answer your questions based on DSA and CP
+- Leaderboard based on number of daily problems practiced
+- Profile page with all your data for quick reference
 
 List down all the partially implemented features in your project
-
+- Fine tuned chatbot for CP questions
 ## 🔮Future Scope
-
+- Can add 'reputation points' for users who answer queries in discussion reliably
+- Can add other platforms like GeeksForGeeks, AtCoder etc
+- Interactive IDE for collaborative problem solving
 
 ## 💸Applications
-
-
+- To enhance and speed up your competitive programming journey with the help of
+  - other people in dicussion
+  - chatbot
+  - monitoring your progress through data
+  - 
 ## 🛠Project Setup
 
 For the Web-App 1.Clone the GitHub repo.
 ```bash
-git clone <url>
+git clone https://github.com/RushabhMehta2005/CPGA-Inheritance-2024/
 ```
 2.Enter the client directory. Install all the required dependencies.
 ```bash
@@ -84,11 +93,11 @@ git clone <url>
   npm start
 ```
 
-3.To start the backend server:4
+3.To start the backend server:
 ```bash
   cd backend
   npm install
-  npm start
+  nodemon server.js
 ```
 
 ## 👨‍💻Team Members
