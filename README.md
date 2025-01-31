@@ -116,8 +116,8 @@ Add names of your team members with their emails and links to their GitHub accou
 
 Add names of your mentors with their emails and links to their GitHub accounts
 
-- [Pawan Wagh](https://github.com/puwun/):
-- [Varun Rajput](https://github.com/varunrr17/):
+- [Pawan Wagh](https://github.com/puwun/)
+- [Varun Rajput](https://github.com/varunrr17/)
 
 ## 📱Screenshots
 
